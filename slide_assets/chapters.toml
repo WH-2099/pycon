@@ -1,0 +1,663 @@
+# Each entry is one slide; its fields determine the available treatments.
+# Image prompts are in prompts.json; generated images use the same stable ID.
+
+[slides."02-01-pause"]
+section = "第二章 · 一、暂停"
+title = "暂停，现场留下来"
+takeaway = "yield 交还控制权，局部状态与收尾责任仍然存在。"
+status = "PEP 255 → 342 → 380 · Python 2.2 → 2.5 → 3.3"
+diagram_reason = "用状态转换区分暂停、恢复与关闭；比单纯历史时间线更能解释保存现场。"
+code_kind = "可运行 · Python 3.14 · 输出 READY / HELLO / closed"
+language = "python"
+run = true
+code = '''
+def worker():
+    try:
+        message = yield "READY"
+        yield message.upper()
+    finally:
+        print("closed")
+
+def pipeline():
+    yield from worker()
+
+job = pipeline()
+print(next(job))          # 暂停，保留 worker 的现场
+print(job.send("hello"))  # 继续运行，并传入数据
+job.close()              # 委托关闭，进入 finally
+'''
+alt = "调用者通过 next()/send() 恢复执行，yield 返回调用者；栈帧与局部状态被保留，close() 另指向清理。"
+notes = "PEP 255 原始限制针对带 finally 的 try 子句，不是所有 try；PEP 342 才允许这种清理模式。图中的 close 假定已经启动的生成器正确响应 GeneratorExit。throw 可向暂停点注入异常，yield from 还委托异常、关闭与返回值。生成器不承诺 CPU 并行。"
+sources = ["https://peps.python.org/pep-0255/", "https://peps.python.org/pep-0342/", "https://peps.python.org/pep-0380/"]
+
+[slides."02-02-wait"]
+section = "第二章 · 二、等待"
+title = "等结果时，推进别的任务"
+takeaway = "await 标出可能的暂停；Task 由事件循环推进。"
+status = "PEP 3156 · asyncio / Python 3.4　PEP 492 · async / await / Python 3.5"
+diagram_reason = "沿时间纵向展开一次等待，明确同一事件循环先后推进不同任务。"
+mermaid = '''
+sequenceDiagram
+    participant A as Task A
+    participant L as 事件循环
+    participant B as Task B
+    L->>A: 推进协程
+    A-->>L: await 尚未就绪的结果
+    L->>B: 推进其他工作
+    B-->>L: 本次推进结束
+    Note over A,L: 等待的结果就绪
+    L->>A: 从暂停处继续
+'''
+code_kind = "可运行 · Python 3.14 · 输出 waiting / other work / resumed"
+language = "python"
+run = true
+code = '''
+import asyncio
+
+async def main():
+    ready = asyncio.Event()
+    async def request():
+        print("waiting")
+        await ready.wait()
+        print("resumed")
+
+    task = asyncio.create_task(request())
+    await asyncio.sleep(0)
+    print("other work")
+    ready.set()
+    await task
+
+asyncio.run(main())
+'''
+alt = "单条时间线上依次执行蓝色任务 A、橙色任务 B、蓝色任务 A；下方弧线标出 A 从 await 到恢复之间的等待跨度。"
+notes = "await 不保证每次都让出执行权；等待已经完成的对象可以直接继续。创建协程对象不等于已经创建 Task，也不等于已调度。此处图示普通调度路径；Python 3.14 的 eager_start 还允许创建时立即推进。示例使用事件替代网络，离线可运行。"
+sources = ["https://peps.python.org/pep-3156/", "https://peps.python.org/pep-0492/", "https://docs.python.org/3.14/library/asyncio-task.html"]
+
+[slides."02-03-ownership"]
+section = "第二章 · 三、归属"
+title = "函数返回了，任务归谁？"
+takeaway = "创建任务只完成了分叉，还需要交代等待、异常和清理。"
+status = "Task 可以超出创建它的函数生命周期"
+diagram_reason = "作用域边界呈现任务越界；用一块待明确的责任清单收束问题，不把没有分支的提问画成决策菱形。"
+code_kind = "可运行 · Python 3.14 · 输出 response / log written"
+language = "python"
+run = true
+code = '''
+import asyncio
+
+async def write_log(ready):
+    await ready.wait()
+    print("log written")
+
+async def handle_request(ready):
+    return asyncio.create_task(write_log(ready))
+
+async def main():
+    ready = asyncio.Event()
+    task = await handle_request(ready)
+    print("response")       # 请求函数已返回
+    assert not task.done()  # 日志任务尚未完成
+    ready.set()
+    await task              # 外层显式接手收尾
+
+asyncio.run(main())
+'''
+alt = "上方请求函数创建下方日志任务；请求函数在返回时刻结束，日志任务跨过返回虚线继续运行，末端提出谁来收尾。"
+notes = "代码刻意把 Task 返回给外层并保留强引用，以确定性展示函数返回后任务仍未完成。它展示手工接手责任，不推荐丢弃 Task 句柄。事件循环只保留 Task 的弱引用；asyncio.run 退出时会取消剩余任务，也不能用它冒充长期后台服务。"
+sources = ["https://docs.python.org/3.14/library/asyncio-task.html#asyncio.create_task", "https://vorpus.org/blog/notes-on-structured-concurrency-or-go-statement-considered-harmful/"]
+
+[slides."02-04-taskgroup"]
+section = "第二章 · 四、责任"
+title = "失败回到父级，清理留在组内"
+takeaway = "TaskGroup 离开前，等待它管理的子任务收尾。"
+status = "TaskGroup / Python 3.11+　PEP 789 / Draft：继续约束 yield 越界"
+diagram_reason = "从子任务运行时开始，保留失败、取消、清理与异常汇总的时间顺序；省略前页已经说明的创建过程。"
+mermaid = '''
+sequenceDiagram
+    participant P as 父任务 / TaskGroup
+    participant A as 子任务 A
+    participant B as 子任务 B
+    Note over P,B: 组内子任务正在运行
+    A-->>P: 普通异常
+    rect rgb(255,244,230)
+        P->>B: 请求取消
+        B-->>P: finally 清理完成并结束
+    end
+    Note over P,B: 所有子任务结束后
+    P->>P: 汇总异常，退出
+'''
+code_kind = "可运行 · Python 3.14 · 输出 cleaned / 1"
+language = "python"
+run = true
+code = '''
+import asyncio
+
+async def fail():
+    await asyncio.sleep(0)
+    raise ValueError("profile failed")
+
+async def sibling():
+    try:
+        await asyncio.sleep(60)
+    finally:
+        print("cleaned")
+
+async def main():
+    try:
+        async with asyncio.TaskGroup() as group:
+            group.create_task(fail())
+            group.create_task(sibling())
+    except* ValueError as errors:
+        print(len(errors.exceptions))
+
+asyncio.run(main())
+'''
+alt = "TaskGroup 虚线边界内，失败引出取消请求，两路经过清理并等待全部结束，之后 ExceptionGroup 才越过边界向外传播。"
+notes = "普通非 CancelledError 异常触发取消其他任务；CancelledError 本身不按普通失败处理。KeyboardInterrupt 与 SystemExit 在等待清理后特殊重抛。取消是协作式请求，吞掉取消或一直不让出执行权可能阻碍退出。PEP 789 仍为 Draft，不展示 sys.prevent_yields 为已发布 API；它限制 yield/yield from 而不是 await。"
+sources = ["https://docs.python.org/3.14/library/asyncio-task.html#task-groups", "https://peps.python.org/pep-0654/", "https://peps.python.org/pep-0789/"]
+
+[slides."02-05-structure"]
+section = "第二章 · 五、组织"
+title = "调用栈，长成责任树"
+takeaway = "用可嵌套的作用域组织任务，逐层创建，逐层收束。"
+status = "结构化编程 → 结构化并发　下一问：任务在哪里执行？"
+diagram_reason = "树边只表达归属，创建与收尾由页内结论说明；区分 posts 任务与它内部的任务组，不以重复回边制造控制流回路。"
+code_kind = "可运行 · Python 3.14 · 输出 profile / body / comments"
+language = "python"
+run = true
+code = '''
+import asyncio
+
+async def posts():
+    async with asyncio.TaskGroup() as group:
+        body = group.create_task(asyncio.sleep(0, "body"))
+        comments = group.create_task(asyncio.sleep(0, "comments"))
+    return body.result(), comments.result()
+
+async def page():
+    async with asyncio.TaskGroup() as group:
+        profile = group.create_task(asyncio.sleep(0, "profile"))
+        article = group.create_task(posts())
+    return profile.result(), *article.result()
+
+print(asyncio.run(page()))
+'''
+alt = "页面 TaskGroup 包含 profile 与 posts TaskGroup，posts 内的正文和评论先汇合，随后与 profile 在外层汇合并收束。"
+notes = "TaskGroup 只管理通过该组 create_task 创建的任务，不自动收编作用域里任意 asyncio.create_task 产生的任务。责任树不指定核心、不自动提供 CPU 并行。结构化编程的局部可理解性是这里的类比重点，不把历史画成技术淘汰链。"
+sources = ["https://docs.python.org/3.14/library/asyncio-task.html#task-groups", "https://vorpus.org/blog/notes-on-structured-concurrency-or-go-statement-considered-harmful/"]
+
+[slides."03-01-processes"]
+section = "第三章 · 一、进程"
+title = "跨进程，各有一份运行时"
+takeaway = "地址空间隔开状态，IPC 连接工作。"
+status = "PEP 371 · multiprocessing / Python 2.6　示例使用 ProcessPoolExecutor"
+diagram_reason = "进程边框表示地址空间；IPC 和核心连线接到进程边界，避免穿过分组标题，内部对象关系留在框内。"
+code_kind = "可运行 · Python 3.14 · 保存为 .py 文件运行"
+language = "python"
+run = true
+code = '''
+from concurrent.futures import ProcessPoolExecutor
+
+def square_sum(n):
+    return sum(i * i for i in range(n))
+
+if __name__ == "__main__":
+    with ProcessPoolExecutor(max_workers=2) as pool:
+        results = list(pool.map(square_sum, [1000, 2000]))
+    print(results)  # 参数和结果跨进程边界
+'''
+alt = "进程 A 和 B 各有独立外框，分别包含解释器、GIL 与本地状态，并连接框外不同的 CPU 核心；中间信封表示 IPC 通信。"
+notes = "图以通常启用 GIL 的构建为例；自由线程构建也可以启动多个进程。进程不固定绑定特定核心，操作系统决定调度。进程池示例需可导入的主模块和可序列化的函数、参数与结果，不能保证在 REPL 或 marimo 单元格内直接运行。此处不假定 fork；Python 3.14 默认启动方式已发生变化。小示例验证机制，不是性能基准。"
+sources = ["https://peps.python.org/pep-0371/", "https://peps.python.org/pep-3148/", "https://docs.python.org/3.14/library/concurrent.futures.html#processpoolexecutor"]
+
+[slides."03-02-interpreters"]
+section = "第三章 · 二、解释器"
+title = "同一进程，分开解释器状态"
+takeaway = "工作线程进入各自解释器，各自持有 GIL。"
+status = "PEP 684 / Python 3.12　PEP 734 / Python 3.14"
+diagram_reason = "外框是进程，内框是解释器；边界层级直接解释它与多进程的区别。"
+code_kind = "可运行 · Python 3.14 · 保存为 .py 文件运行"
+language = "python"
+run = true
+code = '''
+from concurrent.futures import InterpreterPoolExecutor
+
+def square_sum(n):
+    return sum(i * i for i in range(n))
+
+if __name__ == "__main__":
+    with InterpreterPoolExecutor(max_workers=2) as pool:
+        results = list(pool.map(square_sum, [1000, 2000]))
+    print(results)  # 同一进程，参数与结果仍经 pickle
+'''
+alt = "同一进程内的解释器 A 和 B 各有线程、GIL 与本地状态，分别连接不同 CPU 核心；橙色箭头经序列化消息从 A 指向 B。"
+notes = "此页具体指 InterpreterPoolExecutor 创建的隔离解释器，不宣称任何历史子解释器自动拥有独立 GIL。池通过 pickle 传送 callable、参数和结果。普通可变 Python 对象不直接共用；进程级资源仍在同一进程，多解释器不是安全沙箱，也不等同进程的故障隔离。模块状态迁移铺垫见 PEP 3121、489、630。"
+sources = ["https://peps.python.org/pep-0684/", "https://peps.python.org/pep-0734/", "https://docs.python.org/3.14/library/concurrent.futures.html#interpreterpoolexecutor", "https://peps.python.org/pep-3121/", "https://peps.python.org/pep-0489/", "https://peps.python.org/pep-0630/"]
+
+[slides."03-02a-interpreter-state"]
+section = "第三章 · 二、解释器 · 状态局部化"
+title = "先把状态分开，GIL 才能分开"
+takeaway = "运行时与模块实例各管各的状态，进程级资源仍需协调。"
+status = "PEP 684 / 3.12 · PEP 687 / 标准库扩展改造 · 模块状态不会自动隔离 C 全局变量"
+diagram_reason = "左侧待局部化状态经过重构，右侧进入解释器 A 和 B 各自的运行时、模块状态与 GIL 边界。"
+alt = "左侧待局部化状态经过重构，右侧进入解释器 A 和 B 各自的运行时、模块状态与 GIL 边界。"
+notes = "PEP 3121 为模块对象提供 C 状态存储，PEP 489 多阶段初始化允许独立模块实例，PEP 573 让扩展方法找到所属模块状态，PEP 630 归纳扩展隔离方法，PEP 687 推进标准库扩展的模块局部状态与所需堆类型改造；PEP 684 将大部分依赖 GIL 的运行时状态移入 PyInterpreterState。不是所有状态都复制，也不是所有静态类型都必须变成堆类型。PEP 683 支撑少量本来不可变的全局对象继续共享。csv.field_size_limit 在一个解释器内的修改不影响另一个，已在 3.14.7 顺序调用验证。文件描述符、环境、外部 C 库仍属于进程级资源。Py_MOD_PER_INTERPRETER_GIL_SUPPORTED 与 Py_MOD_GIL_NOT_USED 是两种不同支持声明，不能互相替代。"
+sources = ["https://peps.python.org/pep-0684/#per-interpreter-state", "https://peps.python.org/pep-0687/", "https://peps.python.org/pep-3121/", "https://peps.python.org/pep-0489/", "https://peps.python.org/pep-0573/", "https://peps.python.org/pep-0630/", "https://peps.python.org/pep-0683/", "https://docs.python.org/3.14/c-api/module.html#c.Py_mod_multiple_interpreters"]
+
+[slides."03-02b-interpreter-transfer"]
+section = "第三章 · 二、解释器 · 跨界数据"
+title = "对象跨界，先说清复制还是共享"
+takeaway = "普通对象通常复制；显式共享缓冲，还要约定写入顺序。"
+status = "PEP 734 · Python 3.14 · concurrent.interpreters 的共享机制；解释器池另走 pickle"
+diagram_reason = "解释器 A 和 B 的普通对象沿复制路径成为两份对象；各自的 memoryview 则连接同一块需要协调写入的底层缓冲。"
+alt = "解释器 A 和 B 的普通对象沿复制路径成为两份对象；各自的 memoryview 则连接同一块需要协调写入的底层缓冲。"
+notes = "本页限定 concurrent.interpreters，普通可变对象通常由 pickle 复制；许多不可变内置值会直接共享或高效复制，并非所有数据都 pickle。memoryview 包装器彼此分开，底层缓冲可以共享；跨解释器 Queue 也共享其底层队列结构。图的上下两路是不同处理方式，不是先复制再共享。共享缓冲仍需约定写入、交接与生命周期，两个 GIL 不共同保护它。InterpreterPoolExecutor 的 callable、参数和结果走 pickle，不因此自动获得本图全部共享路径。PEP 3118 提供缓冲协议基础。隔离不等于安全沙箱。已在 3.14.7 顺序调用确认 list 复制与 memoryview 缓冲共享，没有据此宣称并发写入安全。"
+sources = ["https://peps.python.org/pep-0734/#shareable-objects", "https://peps.python.org/pep-0734/#synchronization", "https://docs.python.org/3.14/library/concurrent.interpreters.html#sharing-objects", "https://docs.python.org/3.14/library/concurrent.futures.html#interpreterpoolexecutor", "https://peps.python.org/pep-3118/"]
+
+[slides."03-03-threads"]
+section = "第三章 · 三、线程"
+title = "同一解释器，也能多核执行"
+takeaway = "关闭 GIL 后，局部保护与应用同步接手。"
+status = "3.13：实验　→　3.14：正式支持、仍可选；需要 free-threaded 构建且 GIL 关闭"
+diagram_reason = "从执行位置到线程再到共享对象，形成清楚的横向关系；保护机制收进共享对象标签，避免跨边界连线与分支交叉。"
+code_kind = "可运行 · 需要 CPython 3.14t，且运行时 GIL 关闭"
+language = "python"
+run = true
+requires = "free-threaded"
+code = '''
+import sys
+from concurrent.futures import ThreadPoolExecutor
+
+def square_sum(n):
+    return sum(i * i for i in range(n))
+
+if __name__ == "__main__":
+    if sys._is_gil_enabled():
+        raise SystemExit("请用 free-threaded Python，并关闭 GIL")
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results = list(pool.map(square_sum, [1000, 2000]))
+    print(results)
+'''
+alt = "标有 GIL 关闭的同一解释器内，线程 A 和 B 共同连接一个共享对象及其局部保护，同时各自连接解释器框外不同的 CPU 核心。"
+notes = "可用 uv run --python 3.14t python -X gil=0 example.py 运行提取出的示例；首次获取解释器需要网络，现场须预装。运行时检测应在所需扩展导入后进行。默认 GIL 构建中的扩展也可能释放 GIL 执行原生代码，本章限定 CPU 密集的 Python 代码。无锁计算只使用本地状态，不等于任意共享写入安全。核心连线表示可以同时执行的位置，不表示线程与核心永久绑定；实际调度由操作系统决定。"
+sources = ["https://peps.python.org/pep-0703/", "https://peps.python.org/pep-0779/", "https://docs.python.org/3.14/howto/free-threading-python.html"]
+
+[slides."03-04-parallel"]
+section = "第三章 · 四、并行"
+title = "三条路线，三种边界"
+takeaway = "并行位置与数据边界一起选择；三条路线长期共存。"
+status = "asyncio 组织等待；执行模型决定工作在哪里运行"
+diagram_reason = "三列固定对齐，位置与状态边界合为一格，保留交接机制；不用优劣象限或带数值的性能图。"
+code_kind = "Python 伪代码 · 对比同一任务交给三类执行器"
+language = "python"
+run = false
+code = '''
+# 示意：square_sum 是同一个纯计算函数。
+# 真实可运行版本见本章前三页。
+with ProcessPoolExecutor(2) as pool:
+    pool.map(square_sum, inputs)      # 跨进程
+
+with InterpreterPoolExecutor(2) as pool:
+    pool.map(square_sum, inputs)      # 跨解释器
+
+# 仅 free-threaded 构建且 GIL 关闭：
+with ThreadPoolExecutor(2) as pool:
+    pool.map(square_sum, inputs)      # 同一解释器
+'''
+alt = "三栏比较多进程、多解释器与自由线程：左栏两个分离进程各有任务和数据，中栏同一进程内两个解释器各有数据，右栏两个任务连接同一份数据。"
+notes = "箭头与列不代表固定快慢，也不保证线性加速。进程与解释器边界不排除显式共享内存或外部存储；它们也仍可能发生协议层面的竞态。避免把三条路线画成直接指向同一个普通可变 Python 对象，跨域状态必须标明 IPC、共享内存或外部服务。竞态不要求真正并行，有 GIL 或协程交错也可出现。"
+sources = ["https://docs.python.org/3.14/library/concurrent.futures.html", "https://docs.python.org/3.14/library/concurrent.interpreters.html", "https://docs.python.org/3.14/howto/free-threading-python.html"]
+
+[slides."04-01-boundaries"]
+section = "第四章 · 一、本地 / 传递 / 不变"
+title = "先减少共同写入"
+takeaway = "留在本地，通过消息交接，或者让大家只读。"
+status = "PEP 416 / Rejected · PEP 603 / Draft · PEP 814 / Final，目标 Python 3.15"
+diagram_reason = "用三栏固定排列比较本地、传递与不变，分别说明使用者与状态关系，不暗示三者必须先后执行。"
+mermaid = '''
+block-beta
+    columns 3
+    L["本地"] M["传递"] F["不变"]
+    A["一个所有者"] B["发送方 → 接收方"] C["多个读者"]
+    D["本地维护"] E["值 / 消息交接"] G["不可变快照"]
+    classDef local fill:#eef8ff,stroke:#087fbd,color:#172033
+    classDef message fill:#fff4e6,stroke:#e67700,color:#172033
+    classDef frozen fill:#edf8f2,stroke:#3e8c68,color:#172033
+    class L,A,D local
+    class M,B,E message
+    class F,C,G frozen
+'''
+code_kind = "可运行 · Python 3.14 · 元组只含不可变值"
+language = "python"
+run = true
+code = '''
+from queue import SimpleQueue
+
+def produce(outbox):
+    local = {"count": 0}       # 本地维护
+    local["count"] += 1
+    message = ("count", local["count"])
+    outbox.put(message)        # 传递不可变值
+
+outbox = SimpleQueue()
+produce(outbox)
+snapshot = outbox.get()
+assert snapshot == ("count", 1)
+print(snapshot)                # 接收方只读
+'''
+alt = "三栏以蓝、橙、绿分别表示本地的一方维护、传递的消息交接，以及不变数据的多方只读。"
+notes = "线程队列传的是同一个对象的引用，不自动复制或转移所有权；示例特意只传不可变成员组成的元组。进程池与解释器池通常序列化重建对象。PEP 814 的 frozendict 在核验日属于 3.15 预发布能力，并且仅浅层不可变；frozendict(items=[]) 内的列表仍可修改。MappingProxyType 是只读视图，不能冒充不可变快照。"
+sources = ["https://docs.python.org/3.14/library/queue.html", "https://peps.python.org/pep-0416/", "https://peps.python.org/pep-0603/", "https://peps.python.org/pep-0814/"]
+
+[slides."04-01a-local"]
+section = "第四章 · 本地 · 任务上下文"
+title = "请求切换，状态跟着任务走"
+takeaway = "ContextVar 隔离绑定；可变值仍可能共享。"
+status = "PEP 567 · Python 3.7+ · asyncio Task 默认复制当前 Context；不深拷贝其中的值"
+diagram_reason = "同一线程按 Task A、Task B、Task A 交错推进，A 的两段连接 request_id=A，B 单独连接 request_id=B。"
+alt = "同一线程按 Task A、Task B、Task A 交错推进，A 的两段连接 request_id=A，B 单独连接 request_id=B。"
+notes = "普通局部变量已能保存显式传递的私有状态。ContextVar 面向跨调用层的请求上下文，避免仅用线程局部变量时让同一线程内的多个 Task 混用请求信息。asyncio Task 默认在创建时复制当前 Context，后续推进使用该上下文，显式 context 参数可改变默认。这里隔离的是绑定，copy_context 不深拷贝绑定值；若两个 Context 仍引用同一个可变字典，修改字典仍可能互相可见。图故意选不可变的字符串 request_id。A/B/A 是交错执行，不表示 CPU 并行。"
+sources = ["https://peps.python.org/pep-0567/#rationale", "https://peps.python.org/pep-0567/#asyncio", "https://docs.python.org/3.14/library/contextvars.html", "https://docs.python.org/3.14/library/asyncio-task.html#asyncio.Task"]
+
+[slides."04-01b-transfer"]
+section = "第四章 · 传递 · 带外缓冲"
+title = "消息照样传，大块数据少搬运"
+takeaway = "元数据进入 pickle，缓冲单独交付；传输层决定怎么搬。"
+status = "PEP 574 · Pickle protocol 5 / Python 3.8+ · 显式启用带外缓冲，不等于自动零拷贝"
+diagram_reason = "发送对象分成对象元数据与带外缓冲两条通路，上路进入 pickle 流，下路绕过该流，接收方由两部分重建对象。"
+alt = "发送对象分成对象元数据与带外缓冲两条通路，上路进入 pickle 流，下路绕过该流，接收方由两部分重建对象。"
+notes = "PEP 574 通过 PickleBuffer、buffer_callback 和 loads(..., buffers=...) 分开描述元数据与大块缓冲。类型和调用方需使用这些接口；默认没有 buffer_callback 时仍写入 pickle 流。协议 5 不保证自动零拷贝，复制、共享内存或其他方式由传输层选择。接收端若与发送端共享底层缓冲，仍须约定存活和修改时序；序列化不是所有权转移协议。普通 queue.Queue 传对象引用，不可将本页泛化成所有队列都复制。PEP 3118 是缓冲协议的相关基础。本图只画独立带外通路，不承诺特定共享内存实现。"
+sources = ["https://peps.python.org/pep-0574/#abstract", "https://peps.python.org/pep-0574/#consumer-api", "https://peps.python.org/pep-0574/#data-sharing", "https://peps.python.org/pep-3118/"]
+
+[slides."04-01c-immutable"]
+section = "第四章 · 不变 · 浅层边界"
+title = "冻结键值关系，还要看值会不会变"
+takeaway = "frozendict 固定映射，list 内容仍可变。"
+status = "PEP 416 / Rejected → PEP 603 / Draft → PEP 814 / Final · Python 3.15 RC"
+diagram_reason = "绿色 frozendict 映射的固定连接分别指向字符串、数字和橙色 list；只有 list 内部元素可以变化。"
+alt = "绿色 frozendict 映射的固定连接分别指向字符串、数字和橙色 list；只有 list 内部元素可以变化。"
+notes = "PEP 814 已 Final，内置 frozendict 在 Python 3.15 预发布中实现；截至 2026-09-04 是 3.15.0rc2，正式版计划 10 月 1 日，不能称 Python 3.14 已有该内置类型。构造为浅拷贝，键值对应关系固定，不递归冻结值。PEP 416 被拒，PEP 603 仍 Draft。MappingProxyType 是动态只读视图，原 dict 可由其他引用修改，不等于不可变快照。dict.freeze、深层冻结、原地 O(1) 所有权转移不是 PEP 814 的已实现承诺。哈希仍取决于成员，不因有 frozendict 就保证任何内容都可哈希。"
+sources = ["https://peps.python.org/pep-0814/#construction", "https://peps.python.org/pep-0814/#thread-safety", "https://peps.python.org/pep-0814/#deferred-ideas", "https://peps.python.org/pep-0416/", "https://peps.python.org/pep-0603/", "https://peps.python.org/pep-0790/#release-schedule"]
+
+[slides."04-02-race"]
+section = "第四章 · 二、同步 · 竞态"
+title = "各步安全，整段仍会竞态"
+takeaway = "检查—计算—写入，需要保护完整的状态变化。"
+status = "有 GIL 也可能发生；竞态不以真正并行为前提"
+diagram_reason = "用四次缓存访问展示先检查、后写入的交错，省略重复的问答箭头；浅橙区突出两个线程都观察到缺失。"
+mermaid = '''
+sequenceDiagram
+    participant A as 线程 A
+    participant C as cache
+    participant B as 线程 B
+    rect rgb(255,244,230)
+        A->>C: 检查：缺失
+        B->>C: 检查：缺失
+    end
+    Note over A,B: 两边都执行 build_value()
+    A->>C: 写入结果 A
+    B->>C: 写入结果 B
+    Note over C: A 的结果被覆盖
+'''
+code_kind = "可运行反例 · Barrier 固定触发两次计算，末值不固定"
+language = "python"
+run = true
+code = '''
+from concurrent.futures import ThreadPoolExecutor
+from threading import Barrier
+
+cache = {}
+both_checked = Barrier(2)
+
+def get_value(worker):
+    if "key" not in cache:
+        both_checked.wait()  # 两人都通过检查，再继续
+        cache["key"] = worker
+        return "built"
+    return "hit"
+
+with ThreadPoolExecutor(2) as pool:
+    outcomes = list(pool.map(get_value, ["A", "B"]))
+assert outcomes == ["built", "built"]
+print(outcomes, cache)
+'''
+alt = "线程 A 和 B 都发现缓存缺失，各自计算后写入同一个 cache；红色覆盖箭头标出两路写入之间的竞态。"
+notes = "Barrier 是复现交错的实验仪器，不是修复方案；移除它后问题仍可能发生，但不保证每次复现。具体例子是应用竞态，不是声称 dict 内部内存已损坏。若 build_value 有副作用，重复执行可能比最后覆盖的值更严重。图中检查箭头包含本次访问观察到的结果，省略读取请求与返回的协议细节；此交错以 B 最后写入为例，调换写入顺序则末值改变。应用锁修复见 04-08。"
+sources = ["https://docs.python.org/3.14/howto/free-threading-python.html#thread-safety", "https://docs.python.org/3.14/library/threading.html#barrier-objects"]
+
+[slides."04-03-protection"]
+section = "第四章 · 二、同步 · 五层保护总览"
+title = "全局锁拆开，保护分头接手"
+takeaway = "引用、内存、GC、容器和执行各自承担局部责任。"
+status = "PEP 703 的设计脉络；细节按 CPython 3.14 核对"
+diagram_reason = "五个同级分支是一份分类总览，思维导图避免制造不存在的执行先后。"
+mermaid = '''
+mindmap
+  root((局部保护))
+    引用计数
+      本地快路
+    内存
+      mimalloc
+    GC
+      稳定堆视图
+    容器
+      对象锁
+    执行与扩展
+      并发约定
+'''
+alt = "虚线框内五个盾牌分别标出引用计数、内存、GC、容器、执行与扩展；框外下方的一把锁单独标出应用同步。"
+notes = "五层是讲解分类，不是 PEP 原文规定的五项接口，也不是执行流水线。PEP 703 是原始设计，发布后的实现继续演进；3.14 的线程本地字节码与原稿的特化互斥锁叙述不同。应用层的复合不变量需要单独保护，不在五层总览里被自动解决。"
+sources = ["https://peps.python.org/pep-0703/", "https://docs.python.org/3.14/howto/free-threading-python.html", "https://docs.python.org/3.14/using/cmdline.html#cmdoption-X"]
+
+[slides."04-04-refcounts"]
+section = "第四章 · 二、同步 · 引用计数"
+title = "少争同一个计数器"
+takeaway = "本地能处理的先本地处理，必要时再合并。"
+status = "偏置 · 永生 · 延迟 · 分线程计数；适用对象和回收路径不同"
+diagram_reason = "四格并列比较减少计数争用的手段，不制造执行顺序或互斥分支；永生对象明确不回收，不汇入最终回收箭头。"
+mermaid = '''
+block-beta
+    columns 2
+    A["偏置计数<br/>所属线程：本地计数<br/>其他线程：共享计数"] B["永生对象<br/>跳过计数更新<br/>不回收"]
+    C["延迟引用<br/>部分栈上引用<br/>留待 GC 扫描确认"] D["分线程计数<br/>各线程累计<br/>运行时协调合并"]
+    classDef immortal fill:#edf8f2,stroke:#3e8c68,color:#172033
+    classDef deferred fill:#fff4e6,stroke:#e67700,color:#172033
+    classDef distributed fill:#f3efff,stroke:#7b61a8,color:#172033
+    class B immortal
+    class C deferred
+    class D distributed
+'''
+alt = "四组独立示意分别展示偏置计数的本地与共享部分、无回收出边的永生对象、延迟计数，以及分线程记录后由运行时汇总。"
+notes = "四格是可以组合的机制，不是每个对象都经过的四个阶段。偏置计数的所属线程是记账优化，不意味着对象只允许该线程访问。共享计数采用原子更新且还包含状态位，回收需协调，不能画成两个数字相加立即释放。3.14 分线程计数用于堆类型、代码对象和模块 __dict__ 等特定对象；延迟计数也只针对部分对象/栈引用。永生对象不应被箭头汇入最终回收。"
+sources = ["https://peps.python.org/pep-0703/#reference-counting", "https://docs.python.org/3.14/howto/free-threading-python.html#free-threaded-reference-counting-can-cause-objects-to-live-longer", "https://docs.python.org/3.14/howto/free-threading-python.html#per-thread-reference-counting-can-delay-freeing-objects", "https://peps.python.org/pep-0683/"]
+
+[slides."04-04a-biased-counting"]
+section = "第四章 · 二、同步 · 引用计数：偏置"
+title = "常走本地路径，必要时协调合并"
+takeaway = "两部分计数属于同一对象；所属线程是记账优化。"
+status = "PEP 703 · CPython 3.14.7 free-threaded · 不凭单个计数判定可释放"
+diagram_reason = "所属线程连接同一对象中的本地计数，其他线程连接共享计数；需要时协调合并，再判定存活。"
+alt = "所属线程连接同一对象中的本地计数，其他线程连接共享计数；需要时协调合并，再判定存活。"
+notes = "本页依据 PEP 703 设计及 v3.14.7 Include/refcount.h、Objects/object.c、Python/brc.c。所属线程的本地快路径不限制对象被其他线程访问；它不是业务所有权。其他线程通过共享计数原子更新，跨线程增减、线程退出与 GC 等参与协调合并。ob_ref_shared 还包含状态位，共享计数可临时为负，不能直接把原始字段相加。普通未共享对象有释放快路径，不是所有对象都必须等待 GC。本地路径在 3.14.7 实际使用 relaxed atomic load/store，避免 C 数据竞争；优化的是共享原子读改写争用，不应标完全非原子。强引用保护存活不冻结内容，借用引用的安全范围仍要另行判断。"
+sources = ["https://peps.python.org/pep-0703/#biased-reference-counting", "https://github.com/python/cpython/blob/v3.14.7/Include/refcount.h", "https://github.com/python/cpython/blob/v3.14.7/Objects/object.c", "https://github.com/python/cpython/blob/v3.14.7/Python/brc.c", "https://docs.python.org/3.14/c-api/refcounting.html"]
+
+[slides."04-04b-deferred-counting"]
+section = "第四章 · 二、同步 · 引用计数：延后"
+title = "少争计数器，也要补齐存活信息"
+takeaway = "栈引用要补看，分散的计数要汇总；两种机制可以组合。"
+status = "PEP 703 · CPython 3.14.7 free-threaded · 特定对象适用；永生对象另行处理"
+diagram_reason = "上方延迟计数路径由栈上引用到 GC 扫描，下方分线程路径由各自累计到协调汇总，两条机制没有前后连接。"
+alt = "上方延迟计数路径由栈上引用到 GC 扫描，下方分线程路径由各自累计到协调汇总，两条机制没有前后连接。"
+notes = "延迟计数跳过部分 Python 栈引用的常规增减，GC 需要补看栈引用；典型包括模块、模块顶层函数、类作用域定义的方法、描述器及 threading.local。3.14.7 的分线程计数用于堆类型、代码对象和模块 __dict__，并非 Python 函数；它们通过线程数组累计，由安全点、线程退出及 GC 协调汇总，不仅在 GC 才合并。uniqueid.c 顶部 only heap types 注释过时，实际清除分支和固定 HOWTO 应交叉核对。PEP 703 原始标志位设计与 3.14.7 ob_gc_bits 实现不同。本图两路是可组合的机制，永生对象不连入通常回收；Py_REFCNT == 1 也不足以证明业务上的唯一所有权。"
+sources = ["https://peps.python.org/pep-0703/#deferred-reference-counting", "https://peps.python.org/pep-0703/#reference-counting-type-objects", "https://github.com/python/cpython/blob/v3.14.7/Doc/howto/free-threading-python.rst", "https://github.com/python/cpython/blob/v3.14.7/Python/uniqueid.c", "https://peps.python.org/pep-0683/"]
+
+[slides."04-05-memory-gc"]
+section = "第四章 · 二、同步 · 内存 / 垃圾回收"
+title = "先得到稳定的堆视图"
+takeaway = "mimalloc 提供遍历基础；GC 在协调暂停中检查引用。"
+status = "CPython 3.14 free-threaded：非分代 GC；图示关键暂停阶段"
+diagram_reason = "线程暂停、扫描和恢复需要时间顺序；注明省略中间阶段，不画成全过程只暂停一次。"
+mermaid = '''
+sequenceDiagram
+    participant T as Python 线程
+    participant G as GC 协调者
+    participant H as 堆对象 / 线程栈
+    G->>T: 请求到达安全点
+    T-->>G: 相关线程已暂停
+    G->>H: 扫描对象与延迟引用
+    H-->>G: 稳定的引用关系
+    G->>T: 允许恢复
+    Note over T,H: 省略终结器与再检查等阶段
+'''
+alt = "两条 Python 线程轨道在同一橙色时间窗口内暂停，窗口内展示 mimalloc 堆与 GC 扫描，窗口之后两条线程恢复执行。"
+notes = "只限定 free-threaded 3.14，不概括为所有 Python 都废除分代回收。停止世界针对解释器相关线程状态与安全点，不是杀停整个操作系统。PEP 703 区分发现循环前及终结器之后的暂停，析构器/终结器不应被粗略放在所有线程停止的唯一阶段。mimalloc 提供堆对象遍历基础，扫描线程栈是另一个步骤，不把两者合称为 mimalloc 管理的堆栈。mimalloc 不是业务同步机制，也不承诺所有分配操作无锁。"
+sources = ["https://peps.python.org/pep-0703/#memory-management", "https://peps.python.org/pep-0703/#garbage-collection-cycle-collection", "https://github.com/python/cpython/blob/v3.14.7/InternalDocs/garbage_collector.md"]
+
+[slides."04-05a-gc-heap"]
+section = "第四章 · 二、同步 · GC：堆与引用"
+title = "分配器找到对象，类型说明引用"
+takeaway = "mimalloc 提供对象位置；tp_traverse 提供引用关系。"
+status = "PEP 703 · CPython 3.14.7 free-threaded · C 扩展的 GC 遍历责任仍然存在"
+diagram_reason = "左侧 mimalloc 内存页中的少量受跟踪对象，经过 tp_traverse 描述后，在右侧呈现对象之间的引用关系。"
+alt = "左侧 mimalloc 内存页中的少量受跟踪对象，经过 tp_traverse 描述后，在右侧呈现对象之间的引用关系。"
+notes = "自由线程 3.14.7 通过 mimalloc 结构、GC 跟踪标记与相关堆查找对象，不再维护所有 GC 对象的统一 PyGC_Head 双向链表；临时不可达工作列表仍存在，不能概括为完全没有链表。mimalloc page 不是操作系统页，也不是线程栈。候选对象的引用边由类型 tp_traverse 提供，分配器不会识别任意 C 缓冲中的指针。可能形成循环的扩展容器需提供或继承 Py_TPFLAGS_HAVE_GC 与 tp_traverse，可变容器还需 tp_clear，遵守分配、跟踪及清理协议。非分代不代表每次对每个对象做相同扫描，可跳过永生、冻结、未跟踪或已知存活对象。本图是视图展开，不是对象搬迁。"
+sources = ["https://peps.python.org/pep-0703/#memory-management", "https://github.com/python/cpython/blob/v3.14.7/InternalDocs/garbage_collector.md#differences-between-gc-implementations", "https://github.com/python/cpython/blob/v3.14.7/Python/gc_free_threading.c", "https://docs.python.org/3.14/c-api/gcsupport.html"]
+
+[slides."04-05b-gc-cycle"]
+section = "第四章 · 二、同步 · GC：两次暂停"
+title = "先找不可达，再确认没有复活"
+takeaway = "终结器可能改变引用关系，因此前后各检查一次。"
+status = "PEP 442 + PEP 703 · CPython 3.14.7 free-threaded 正常路径 · 暂停宽度不代表耗时"
+diagram_reason = "两条 Python 执行轨道经历两段暂停；第一段查不可达，恢复期间运行终结器，第二段查复活，再恢复后断开循环。"
+alt = "两条 Python 执行轨道经历两段暂停；第一段查不可达，恢复期间运行终结器，第二段查复活，再恢复后断开循环。"
+notes = "按 v3.14.7 gc_collect_internal 正常成功路径：先暂停相关解释器的执行线程，合并计数及 BRC 信息并查不可达；恢复线程后运行弱引用回调与 tp_finalize；再暂停检查复活；再次恢复后对仍不可达对象执行 tp_clear 断环。不能把终结器或 tp_clear 放进两个暂停窗口。对象可由终结器重新获得外部引用，所以第一轮不可达不等于立即销毁。PEP 442 在 3.4 奠定安全终结后重查语义，PEP 703 在无 GIL 场景补入两次 STW。图不覆盖错误/提前返回路径，也不承诺所有 gc 调用都完成两次暂停。暂停针对相关 Python 执行线程而非整个操作系统。"
+sources = ["https://peps.python.org/pep-0442/#disposal-of-cyclic-isolates", "https://peps.python.org/pep-0703/#stop-the-world", "https://github.com/python/cpython/blob/v3.14.7/Python/gc_free_threading.c#L2187"]
+
+[slides."04-06-containers"]
+section = "第四章 · 二、同步 · 容器"
+title = "对象锁保护容器内部"
+takeaway = "部分读取先乐观尝试，必要时退回加锁路径。"
+status = "CPython 实现机制：对象锁 · Python 关键区 · 安全内存回收"
+diagram_reason = "判断节点只保留取得强引用并通过验证的条件，橙色回退、绿色返回；支撑机制用虚线关联，长说明收进节点以保持主路径可读。"
+mermaid = '''
+flowchart LR
+    O["部分容器<br/>乐观读取"] --> V{"取得强引用<br/>且验证通过？"}
+    V -- "是" --> D["返回值"]
+    V -- "否" --> L["对象锁下重读"] --> D
+    M["安全内存回收<br/>延后内存复用"] -.-> O
+    C["Python 关键区<br/>协调嵌套与双对象锁"] -.-> L
+    classDef fallback fill:#fff4e6,stroke:#e67700,color:#172033
+    classDef done fill:#edf8f2,stroke:#3e8c68,color:#172033
+    classDef support fill:#f8fafc,stroke:#94a3b8,color:#475569
+    class L fallback
+    class D done
+    class M,C support
+'''
+alt = "乐观读取进入强引用与验证步骤，成功沿蓝色路径返回值，失败沿红色路径进入橙色加锁重试，之后也返回值。"
+notes = "不是所有读取都无锁，也不是每个对象都在每次读取时加锁。按地址排序与暂挂关键区针对内部协议，不意味着应用中的任意锁组合都无死锁。强引用保护对象存活，不保证对象内容不会改变；乐观读取依赖运行时与安全内存回收，不应翻译成裸 Python 指针示例。"
+sources = ["https://peps.python.org/pep-0703/#container-thread-safety", "https://peps.python.org/pep-0703/#python-critical-sections", "https://peps.python.org/pep-0703/#optimistic-avoiding-locking-dict-and-list-accesses", "https://docs.python.org/3.14/howto/free-threading-extensions.html#critical-sections"]
+
+[slides."04-07-extensions"]
+section = "第四章 · 二、同步 · 执行与扩展"
+title = "并发约定，扩展也要重签"
+takeaway = "字节码、对象存活、扩展声明与 ABI 都有各自边界。"
+status = "CPython 3.14：线程本地字节码 · 强引用 API · Py_mod_gil · cp314t"
+diagram_reason = "四个并列检查项不构成一条调用链，用块图避免误解先后与因果。"
+code_kind = "真实 C API 片段 · 需置于已完成线程安全审查的扩展中"
+language = "c"
+run = false
+code = '''
+/* CPython 3.14；省略完整模块定义。 */
+static PyModuleDef_Slot slots[] = {
+    {Py_mod_gil, Py_MOD_GIL_NOT_USED},
+    {0, NULL}
+};
+
+static PyObject *first_item(PyObject *items) {
+    PyObject *item = PyList_GetItemRef(items, 0);
+    if (item == NULL) {
+        return NULL;  /* 保留 IndexError / TypeError */
+    }
+    return item;      /* 新的强引用交给调用方 */
+}
+/* cp314t 需要单独 wheel；声明本身不会修好竞态。 */
+'''
+alt = "四个独立模块展示线程 A 和 B 各自的本地字节码、PyList_GetItemRef 强引用、Py_mod_gil 扩展声明，以及 cp314t 标签。"
+notes = "原稿“特化时互斥锁、多线程每条字节码只特化一次”来自 PEP 703 早期设计；3.14 使用线程本地字节码，-X tlbc=0 同时禁用该机制与特化。实际 API 是 PyList_GetItemRef 和 PyDict_GetItemRef，不能沿用 v0 的 FetchItem 草案名。未声明支持的扩展默认可触发警告并启用 GIL；显式强制关闭 GIL 会改变这一行为。3.14 无自由线程 stable ABI；PEP 803 的 abi3t 是 3.15 事项，不与 cp314t 混写。"
+sources = ["https://docs.python.org/3.14/using/cmdline.html#cmdoption-X", "https://docs.python.org/3.14/howto/free-threading-extensions.html", "https://docs.python.org/3.14/c-api/list.html#c.PyList_GetItemRef", "https://peps.python.org/pep-0803/"]
+
+[slides."04-08-lock"]
+section = "第四章 · 二、同步 · 回到应用"
+title = "完整状态变化，放进锁里"
+takeaway = "保护业务不变量，要覆盖检查、计算和写入全过程。"
+status = "与前面的竞态反例对应；所有访问遵守同一把锁"
+diagram_reason = "与竞态页保持相同的三个角色，以 critical 区块展示同一把锁的两次持有；完整状态变化留在第一个区块内。"
+mermaid = '''
+sequenceDiagram
+    participant A as 线程 A
+    participant C as cache
+    participant B as 线程 B
+    critical A 持有应用锁
+        A->>C: 检查：缺失
+        A->>A: build_value()
+        A->>C: 写入结果
+    end
+    critical B 获得同一把锁后
+        B->>C: 检查：命中
+        C-->>B: 返回已有结果
+    end
+'''
+code_kind = "可运行 · Python 3.14 · 两个调用得到同一个缓存对象"
+language = "python"
+run = true
+code = '''
+from concurrent.futures import ThreadPoolExecutor
+from threading import Lock
+
+cache, lock = {}, Lock()
+
+def get_value(key):
+    # ponytail: 一把缓存锁；争用显著时改为按键同步。
+    with lock:
+        if key not in cache:
+            cache[key] = object()  # 代表构建结果
+        return cache[key]
+
+with ThreadPoolExecutor(2) as pool:
+    a, b = pool.map(get_value, ["key", "key"])
+assert a is b
+print("one cached object")
+'''
+alt = "同一把锁保护包含检查、计算、写入三步的完整区域；蓝色线程 A 进入，橙色线程 B 停在区域外等待。"
+notes = "这里有意采用一把锁，前提是构建短小且不递归访问同一缓存；不要把它推广到持锁执行未知回调、慢 I/O 或跨服务事务。dict.setdefault(key, build_value()) 会先计算参数，不能避免重复构建。单一所有者加队列是另一种安排顺序的方法，但所有访问者必须共同遵守协议。"
+sources = ["https://docs.python.org/3.14/library/threading.html#lock-objects", "https://docs.python.org/3.14/howto/free-threading-python.html#thread-safety"]
+
+[slides."04-09-state"]
+section = "第四章 · 三、状态"
+title = "谁看，谁改，谁保护"
+takeaway = "访问关系决定边界；共同修改决定同步责任。"
+status = "任务结构 × 执行位置 × 状态关系　→　第五章"
+diagram_reason = "把选择条件写在分支上，使本地、传递、不变和同步成为可使用的判断路径。"
+alt = "中央状态连接四组策略：一方维护用本地，换手用传递，只读用不变，共写用同步；共写图中两个访问者经过同一把锁连接同一份状态。"
+notes = "这是一份设计启发，不是覆盖所有系统的互斥穷举；队列自身也需要同步，传递、不可变与所有者可以组合使用。发布不可变快照仍需合适的交接机制。保留最后一章才出现的“计算自由，数据有界”，此处不提前喊最终口号。"
+sources = ["https://docs.python.org/3.14/library/queue.html", "https://docs.python.org/3.14/howto/free-threading-python.html#thread-safety", "https://peps.python.org/pep-0814/"]
+
+[slides."05-01-manual-state"]
+section = "第五章 · 手动协调"
+title = "锁与等待，仍要自己接起来"
+takeaway = "同一份 A/B/C 工作：互斥与先后，由应用显式组织。"
+status = "线程与锁示例 · A、B 可并行 · 锁不决定结果依赖"
+diagram_reason = "沿用下一页 A/B 在左、C 在右的布局；锁标识对同一状态的互斥访问，两条显式等待边共同限定 C 的启动。"
+alt = "A 用 Lx 加锁更新 x，B 用 Ly 加锁更新 y，两者可以并行。应用显式等待 A、B 都完成，再让 C 按约定顺序获取相同的 Lx、Ly，合并 x、y，并在用后释放锁。"
+notes = "这是传统线程与同步原语的正确用法示例，不代表所有运行时都只能手动管理。应用选择锁与临界区、统一多个锁的获取顺序，并用 with 等作用域管理释放；并不要求手写每次 release。A 只用 x、B 只用 y，可并行。C 的生产者依赖需要 Event、Future 或 join 等明确等待，互斥锁自身不保证 A/B 先于 C。图中各处 x 使用同一把锁、各处 y 使用同一把锁，不是每个任务各锁各的副本；等待生产者完成时不持有它们需要的资源锁。成熟任务框架也能封装部分责任，本页比较应用显式组织的内容，下一页展示声明资源的另一种表达，不作性能或必然死锁的对比。"
+sources = ["https://docs.python.org/3.14/library/threading.html#lock-objects", "https://docs.python.org/3.14/library/threading.html#event-objects", "https://microsoft.github.io/bocpy/"]
+
+[slides."05-02-bocpy"]
+section = "第五章 · Behavior-Oriented Concurrency · bocpy"
+title = "声明资源，运行时安排必要顺序"
+takeaway = "Cown 封装状态，Behavior 声明资源；同一路径先提交 A/B，再提交 C。"
+status = "仅协调已声明的 Cown · bocpy 为第三方实验"
+diagram_reason = "一张 A{x}、B{y} 到 C{x,y} 的图同时表达资源声明和必要顺序；C 的说明补充全部可用、排他执行与释放访问权。"
+alt = "Behavior A 声明 Cown x 并更新 x，Behavior B 声明 Cown y 并更新 y，两者可并行；之后提交的 Behavior C 声明两者，等都完成且资源全部可用后排他访问 x、y，结束时释放访问权。"
+notes = "Cown 为隔离状态提供显式入口，Behavior 是声明零个或多个 Cown 的一段工作。所有请求齐备才开始函数体，运行期对所需状态排他访问，结束后释放访问机会；不是销毁资源，也不撤销修改。全部可用是模型语义，不表示底层单条 CPU 原子指令，不画成业务先拿一把锁再阻塞等另一把。当前普通 Cown 的 acquire 覆盖读写，不能声称有共享读请求接口；noticeboard/PinnedCown 属于其他 API，不在本页展开。本模型只保证遵守显式资源与隔离规则的访问，不自动管理任意全局变量、数据库、文件、外部锁与阻塞 I/O。bocpy 是第三方实验，当前后端主要使用工作子解释器和 XIData，不是 CPython 统一路线。固定源码 c8f3cebcb6f3e610e8fe8c2a9a78f6c9492ccd1f。 本例明确由同一提交路径依次提交 A、B、C。A 需要 x，B 需要 y，两份隔离状态没有交集，因此 A/B 可并行，但不保证同时开始或固定完成先后。C 同时需要 x、y，等两项前置工作都完成。只保留 A→C 与 B→C，没有 A→B 或全局队列；C 的合并也不是数据库事务，无回滚承诺。普通 Cown 请求仍为排他，即使合并动作看起来只读。复杂程序还存在提交与嵌套产生的因果约束，不能把直接资源集合无交集推成永远无先后依赖。2026 因果论文区分模型必要顺序与实现附加顺序。本页是最小教学例子，不作吞吐或性能比较。 标题采用 bocpy 项目的拼写 Behavior-Oriented Concurrency；论文原题中的英式 Behaviour 保留在引用中。"
+sources = ["https://doi.org/10.1145/3622852", "https://github.com/microsoft/bocpy/blob/c8f3cebcb6f3e610e8fe8c2a9a78f6c9492ccd1f/src/bocpy/behaviors.py#L1967", "https://github.com/microsoft/bocpy/blob/c8f3cebcb6f3e610e8fe8c2a9a78f6c9492ccd1f/src/bocpy/worker.py#L24", "https://microsoft.github.io/bocpy/", "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.CONCUR.2026.23", "https://github.com/microsoft/bocpy/blob/c8f3cebcb6f3e610e8fe8c2a9a78f6c9492ccd1f/src/bocpy/_core.c#L3710"]

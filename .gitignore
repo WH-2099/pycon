@@ -1,0 +1,7 @@
+.venv/
+__marimo__/
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.rumdl_cache/
+build/

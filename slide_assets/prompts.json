@@ -1,0 +1,504 @@
+[
+  {
+    "id": "01-timeline",
+    "asset": "public/illustrations/01-timeline.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1919,
+      820
+    ],
+    "sha256": "79a456bb3e10b4277228bb8484b37fbba183baf5ad5785c3b82110dfe1473839",
+    "prompt": "Use case: precise-object-edit. Asset type: technical conference timeline illustration. Image 1 is the edit target. Correct its duplicated milestone and broken time-axis connections. The current image mistakenly has SEVEN panels because 2024 is repeated. REMOVE the bottom-row 2024 panel entirely, preserve only the TOP-RIGHT 2024 panel and make that panel ORANGE for execution capability. Reflow the remaining bottom panels to exactly THREE equally wide panels: 2008 at left, 2022 at middle, 2025 at right. Preserve the three top panels: 2001, 2015, 2024. In total exactly 3+3=6 panels. The previous rendering has only five axis dots and the 2022 card is detached: correct this by using exactly SIX separately spaced dots at roughly 8%,24%,40%,56%,72%,88% canvas width. Connect top-left 2001 to dot1, bottom-left 2008 to dot2, top-middle 2015 to dot3, bottom-middle 2022 to dot4, top-right 2024 to dot5, bottom-right 2025 to dot6. No shared dots, no floating cards, no extra dots. It is okay for a vertical stem to attach near a panel edge instead of its center. Keep all existing correct literal text, style, navy typography and blue/orange palette. Remove unnecessary icons if needed for large text. Final canvas remains extra-wide 2.35:1. Use case: infographic-diagram.\nAsset type: a finished technical conference timeline illustration, extra-wide landscape 2.35:1, preferably 2400 x 1024.\nCreate the actual labeled timeline, not a mockup. Pure white background. Crisp flat editorial infographic, dark navy #172033 text, blue #087fbd, warm orange #d97706 and teal #16836b accents. Large clean sans-serif typography, accurate simplified Chinese and exact English API names. Professional generous spacing, restrained pale panels, very small purposeful icons. Optimize for projection and reading from the back of a room. Fill the canvas with the diagram; outer margin only 3%. No large title, subtitle, legend or footer, as the surrounding slide provides those. Every date, Python version, PEP number and feature specified below must be visible and paired correctly. Do not invent any labels or milestones. Dates are ordered milestones, not a proportional timescale. No gradients, 3D, shadows, mascots, watermark, or tiny decorative text.\n\nRedraw this timeline with EXACTLY SIX panels, SIX dots and SIX connecting stems. No duplicate panels, no detached panel, no numbering. Put the YEAR INSIDE its panel, directly beside its Python version; no year labels floating on the axis. Top row contains ONLY 2001, 2015, 2024 from left to right. Bottom row contains ONLY 2008, 2022, 2025 from left to right. The six axis dots run in chronological order 2001,2008,2015,2022,2024,2025; one unique stem connects each panel to its own dot. Keep each panel's entire label inseparable. Make 2025 text just as large as the others; omit its icon to fit the two features.\nExact panel labels, each quoted item on its own line:\n2001 panel: '2001 · Python 2.2', 'PEP 255', '生成器 · yield'.\n2008 panel: '2008 · Python 2.6 / 3.0', 'PEP 371', 'multiprocessing'.\n2015 panel: '2015 · Python 3.5', 'PEP 492', 'async / await'.\n2022 panel: '2022 · Python 3.11', 'TaskGroup', 'PEP 654 · ExceptionGroup'.\n2024 panel: '2024 · Python 3.13', 'PEP 703', '自由线程 · 实验'.\n2025 panel: '2025 · Python 3.14', 'PEP 734 · 多解释器 API', 'PEP 779 · 自由线程正式可选'.\nTaskGroup appears EXACTLY ONCE, only in 2022. Do not duplicate 2022. Text takes priority over icons. Blue task panels, orange execution panels. The 2024 panel MUST connect to its dot.\n",
+    "source": "/root/.codex/generated_images/01a06ddf-161f-7502-99cd-bb4fcbe1cbbe/exec-ca164462-14d2-4f40-8dc3-e03ceeabe454.png"
+  },
+  {
+    "id": "02-01-pause",
+    "asset": "public/illustrations/02-01-pause.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "eb7f5f59b8811f215466609c8643f64370b167d5a6966d7d71a09cab292f9b5b",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Keep the left caller and right suspended-frame box with return/control arrows. Exact labels only: 调用者, 栈帧保留, yield, next()/send(), close(), 清理. Caller-to-frame arrow says next()/send(); frame-to-caller arrow says yield. Amber pause symbol and a small group of blue local-state blocks inside frame. Delete the dangling rightward dashed arrow; instead a separate close() arrow leads from suspended frame to a small green 清理 node. Preserve a simple large composition, avoid crossing arrows."
+  },
+  {
+    "id": "02-02-wait",
+    "asset": "public/illustrations/02-02-wait.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "909ee6c6d0ac5ab43d39ded59a7b13fe8f3e7e21635e3b4e9c29dbbda83b8a45",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Keep a single execution timeline with three large blocks blue-amber-blue, left-to-right. Exact labels: 任务 A, 任务 B, 任务 A in the three blocks; await at end of first A; 等待结果 on a fine arc beneath that spans from first A to final A; 时间 → at baseline end. This shows A waiting while B runs on the SAME timeline, then A resuming. The arc indicates A's waiting interval, not a function call. Clear direction, generous space, no parallel CPU rows."
+  },
+  {
+    "id": "02-03-ownership",
+    "asset": "public/illustrations/02-03-ownership.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "4231e6b7d36a6db686cbba0657f37b78568de1b9b689aa8ccaac5c85fe23066f",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Replace the two unlabeled trees with two horizontal lifetime tracks. Upper blue track labeled 请求函数 ends midway at a vertical thin dashed time marker labeled 返回. Lower amber track labeled 日志任务 forks from the upper function before it returns, and visibly continues beyond the return marker. At far right task end, a compact outlined box says 谁来收尾？. Only these four labels. The dashed line is a moment in time, not a memory wall. Do not show TaskGroup or a solution yet. Large obvious contrast between function ending and task surviving."
+  },
+  {
+    "id": "02-04-taskgroup",
+    "asset": "public/illustrations/02-04-taskgroup.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "7bf76c13bc49128ab52d6dd193de722ca1132f7d91cc903dc2fbd2c26c1b38bc",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Redraw the failure/cleanup structure clearly. One large dashed rounded boundary labeled TaskGroup. Within it, two top nodes: red 失败 and amber 取消请求. Thin arrow from failure to cancellation request. Both paths go down to a green node labeled 清理, then a neutral node 全部结束. Only after that node, one arrow exits the group boundary to an outside red-outlined node labeled ExceptionGroup. Exact labels only: TaskGroup, 失败, 取消请求, 清理, 全部结束, ExceptionGroup. No unexplained checkmark, no forced termination icon, no error arrow crossing out before cleanup. Compact balanced geometry, no intersections."
+  },
+  {
+    "id": "02-05-structure",
+    "asset": "public/illustrations/02-05-structure.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "a30b9f14b69de38d7a13f07e347231ea3c6abcae32b42a39fca56b36a3365f80",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Keep and clarify nested ownership boundaries. Outer wide rounded pale-blue boundary labeled 页面 TaskGroup. Inside it, left a single blue leaf labeled profile, right a smaller nested pale-blue boundary labeled posts TaskGroup containing two blue leaves labeled 正文 and 评论. These two merge at the nested group's bottom; their group and profile then merge at outer group's bottom marked 收束. Exact six labels only. Small amber join points, thin navy connectors, delete meaningless blank boxes and floating dots. No CPU symbols or claims of physical parallelism."
+  },
+  {
+    "id": "02-timeline",
+    "asset": "public/illustrations/02-timeline.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1920,
+      819
+    ],
+    "sha256": "f847a90f003c49534041f8e667186b8b1f1dcbc235142deb7ffb6f2349974d2d",
+    "prompt": "Use case: infographic-diagram.\nAsset type: a finished technical conference timeline illustration, extra-wide landscape 2.35:1, preferably 2400 x 1024.\nCreate the actual labeled timeline, not a mockup. Pure white background. Crisp flat editorial infographic, dark navy #172033 text, blue #087fbd, warm orange #d97706 and teal #16836b accents. Large clean sans-serif typography, accurate simplified Chinese and exact English API names. Professional generous spacing, restrained pale panels, very small purposeful icons. Optimize for projection and reading from the back of a room. Fill the canvas with the diagram; outer margin only 3%. No large title, subtitle, legend or footer, as the surrounding slide provides those. Every date, Python version, PEP number and feature specified below must be visible and paired correctly. Do not invent any labels or milestones. Dates are ordered milestones, not a proportional timescale. No gradients, 3D, shadows, mascots, watermark, or tiny decorative text.\n\nRedraw with EXACTLY SIX milestone panels and SIX axis dots. Every panel must contain its own YEAR, Python version, PEP number and feature together INSIDE the same border, never put a year separately on the axis. Use three panels above the line and three below: top ONLY 2001,2012,2015, bottom ONLY 2006,2014,2022. Six unique stems connect each panel to one dot in chronological order 2001,2006,2012,2014,2015,2022. In particular 2014 MUST be present inside the asyncio panel and 2015 MUST be inside the async/await panel. No detached or duplicate panels. Use tiny icons or none; text is the focus. Blue panels, with teal for the final TaskGroup scope. Exact text per milestone:\n1: '2001', 'Python 2.2', 'PEP 255', 'yield'\n2: '2006', 'Python 2.5', 'PEP 342', 'send · throw · close'\n3: '2012', 'Python 3.3', 'PEP 380', 'yield from'\n4: '2014', 'Python 3.4', 'PEP 3156', 'asyncio'\n5: '2015', 'Python 3.5', 'PEP 492', 'async / await'\n6: '2022', 'Python 3.11', 'TaskGroup', 'PEP 654 · ExceptionGroup'\nTaskGroup and PEP 654 · ExceptionGroup are separate lines in the 2022 panel. Do not call TaskGroup PEP 654. Do not add future proposals. Every year is INSIDE its own matching panel, not floating between panels.\n",
+    "source": "/root/.codex/generated_images/01a06de1-6d3b-7d23-8644-2fbecdb21724/exec-94138e72-9763-4b84-9d15-79a281da8583.png"
+  },
+  {
+    "id": "03-01-processes",
+    "asset": "public/illustrations/03-01-processes.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "c3f44d7a52749198bbf6ab8a4a48b8f1883b849e1065fa1b33da212272c81143",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Keep two completely separated process boxes and two CPU icons outside below them. Labels at box tops: 进程 A, 进程 B. In each box a blue interpreter rectangle labeled 解释器 + GIL and an amber state block labeled 本地状态. Envelope plus dashed two-way communication between the boxes labeled IPC. Below, one common label CPU 核心 for the two separate core icons. Six kinds of labels, mirrored local labels may repeat. Never merge the two data blocks; CPU icons outside process boundaries, connectors show possible execution rather than mandatory permanent binding."
+  },
+  {
+    "id": "03-02-interpreters",
+    "asset": "public/illustrations/03-02-interpreters.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "3b73911d957348b18d533c62438b01660dfd35b4029da05466fc2fb461420fc5",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Keep one outer process box with two clearly separated inner interpreter boxes. Outer label 同一进程; inner headings 解释器 A and 解释器 B. Inside each, a blue execution arrow labeled 线程 + GIL and a separate amber data block labeled 本地状态. An amber envelope and bidirectional dashed connector between interpreter boxes labeled 序列化. Outside below the outer process border are two CPU core icons. Only the six kinds of labels above; repeated local labels are allowed. No shared mutable object, no shared GIL."
+  },
+  {
+    "id": "03-02a-interpreter-state",
+    "asset": "public/illustrations/03-02a-interpreter-state.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "3f341c49a0aeb4a809efd9d74d773a458e47ea62b26b4ea5df76562d3ef6be05",
+    "prompt": "Use case: infographic-diagram. Edit this existing 1536 x 1024 landscape diagram with text changes ONLY, preserving the exact existing layout, boxes, arrows, pure white background, blue/orange role colors, pale fills, all margins, and the two separate GIL lock icons. In the LEFT large orange rectangle, replace the label “进程全局状态” with exactly “待局部化状态”, large and centered. In the blue inner state rectangle inside interpreter A, replace “模块状态 A” with exactly TWO centered lines: first line “运行时”, second line “模块状态”. In the orange inner state rectangle inside interpreter B, replace “模块状态 B” with the SAME TWO centered lines: first “运行时”, second “模块状态”. Do NOT put A or B in either inner state rectangle because the outer headings already distinguish the interpreters. Do NOT print a slash between the lines. Retain the outer labels “解释器 A”, “解释器 B”, the arrow label “重构”, and the two “GIL” labels unchanged. Keep all state text large enough to read easily in a 1080p slide; each of the two lines must fit comfortably inside its existing inner rectangle. No new icons, arrows, extra labels, or changes to the remaining composition.",
+    "source": "/root/.codex/generated_images/01a06e73-5992-7c81-95c0-bf6984f3c171/exec-cdfd283e-640f-4448-9a18-624bd30910f4.png"
+  },
+  {
+    "id": "03-02b-interpreter-transfer",
+    "asset": "public/illustrations/03-02b-interpreter-transfer.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "90cd72d28a8bb5f099fbcc6b961a6576414732c5c0d2cd957fc93e1bef91da48",
+    "prompt": "Use case: infographic-diagram. Edit the supplied diagram image, preserving its clean technical-conference diagram style, pure white background, dark navy outlines, clear blue #087fbd and warm orange #e67700 palette. Keep landscape 1536 x 1024. Large highly readable labels, generous margins, no title/footer/watermark, no new decorative elements. Preserve the specified technical relationships exactly. Correct only the labeling and reduce redundant text. Preserve TWO separate interpreter frames labeled exactly “解释器 A” and “解释器 B”. In their upper halves keep two distinct object rectangles, containing ONLY “对象 A” and “对象 B” respectively. Delete object_A, object_B, both “独立对象” lines, both “数据副本” labels and their redundant inner strips. Preserve exactly ONE blue arrow from object A to object B labeled “普通对象：复制”. In their lower halves keep wrappers with ONLY “memoryview A” and “memoryview B”, centered as one large line each. Completely DELETE both incorrect “只读视图” labels; do not replace them with any read-only wording. Make these wrapper cards pale orange with dark navy text, to match the orange shared route rather than suggesting immutability. Preserve both downward orange connections to exactly ONE shared buffer, still labeled “共享缓冲：需协调”. No locks. The upper copy path and lower shared-buffer path remain independent. ONLY these exact eight labels may appear. Keep all geometry inside the canvas.",
+    "source": "/root/.codex/generated_images/01a06e73-5992-7c81-95c0-bf6984f3c171/exec-3d4e0468-78a0-49a3-bea2-9b27fe34f58b.png"
+  },
+  {
+    "id": "03-03-threads",
+    "asset": "public/illustrations/03-03-threads.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "f758be6185c9e6a99266fe5e6201a41f90bbcce0e4a5c69dcc3fe5fd55c51597",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Redraw the structure to separate CPU execution from object access. A large boundary labeled 同一解释器, small corner label GIL 关闭. Inside, two blue nodes 线程 A and 线程 B both access the SAME amber 共享对象 below them, with a small nearby shield labeled 局部保护. Two CPU core icons OUTSIDE the boundary below; each thread connects directly to its own core using a separate line routed around the object's access lines. The cores must not be downstream through the shared object. Exactly the six labels specified, clear chip icons without extra labels. Delete the twelve tiny instruction squares and empty core rectangles. Minimize crossing lines."
+  },
+  {
+    "id": "03-04-parallel",
+    "asset": "public/illustrations/03-04-parallel.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "d2e3ddc7e78041f51a1da5b20764bce5aedc66d96880b57b9c313cb1774dcc39",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Rebuild as three equal-scale columns. Six labels only: 多进程 / 地址空间隔离; 多解释器 / 状态隔离; 自由线程 / 共享对象. Left column: two separate runtime boxes, each has one blue task marker and its OWN amber data block. Middle column: one outer box enclosing two separate inner interpreter boxes, each with one blue task marker and OWN amber data. Right column: one outer box and one interpreter box, two blue task markers both access the SAME single amber data block. Delete train-track lines and unlabeled floating circles. No arrows between columns, no speed scores, no shared object connecting the three routes. Make containment differences immediately obvious."
+  },
+  {
+    "id": "03-timeline",
+    "asset": "public/illustrations/03-timeline.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1672,
+      941
+    ],
+    "sha256": "8c2f6640bfff4a36948aebd9542124e9b9709c91f3fdd0717662b5fe88c03f8f",
+    "prompt": "Use case: infographic-diagram.\nAsset type: a finished technical conference timeline illustration, wide landscape 16:9, preferably 2400 x 1350.\nCreate the actual labeled timeline, not a mockup. Pure white background. Crisp flat editorial infographic, dark navy #172033 text, blue #087fbd, warm orange #d97706 and teal #16836b accents. Large clean sans-serif typography, accurate simplified Chinese and exact English API names. Professional generous spacing, restrained pale panels, very small purposeful icons. Optimize for projection and reading from the back of a room. Fill the canvas with the diagram; outer margin only 3%. No large title, subtitle, legend or footer, as the surrounding slide provides those. Every date, Python version, PEP number and feature specified below must be visible and paired correctly. Do not invent any labels or milestones. Dates are ordered milestones, not a proportional timescale. No gradients, 3D, shadows, mascots, watermark, or tiny decorative text.\n\nComposition: THREE parallel horizontal timeline lanes, equal height, with left labels and TWO generously sized milestone panels per lane joined by one short right arrow. Never connect the three lanes to each other. Blue first lane, orange second lane, teal third lane. Dates do not align across rows because each lane has its own chronology. Small icons for separate processes, nested interpreters, shared threads. Large legible API names may occupy their own lines. Exact text:\nLane 1 label '多进程'. Left panel: '2008 · Python 2.6 / 3.0', 'PEP 371', 'multiprocessing'. Right panel: '今天仍在使用', '独立地址空间', '进程间通信'.\nLane 2 label '多解释器'. Left panel: '2023 · Python 3.12', 'PEP 684', 'per-interpreter GIL'. Right panel: '2025 · Python 3.14', 'PEP 734', 'concurrent.interpreters', 'InterpreterPoolExecutor'.\nLane 3 label '自由线程'. Left panel: '2024 · Python 3.13', 'PEP 703', '实验性 free-threading'. Right panel: '2025 · Python 3.14', 'PEP 779', '正式支持 · 仍然可选'.\nNo lane is a successor replacing another. Do not add cross-lane arrows. Spell InterpreterPoolExecutor exactly.\n",
+    "source": "/root/.codex/generated_images/01a06de1-6d3b-7d23-8644-2fbecdb21724/exec-8acd73af-9d60-47c8-9964-ee6f63f20453.png"
+  },
+  {
+    "id": "04-01-boundaries",
+    "asset": "public/illustrations/04-01-boundaries.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "046530296f546ab474b31725e0f5a2b30f4f305e5e0bcfe3941616094ff78a33",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Keep three equally prominent groups: a single owner maintaining local data, sender handing an envelope to receiver, and two readers accessing one immutable snapshot. Only two short labels per group: 本地 / 一方维护; 传递 / 消息交接; 不变 / 多方只读. Replace the right crystal and padlock with a clear green data snapshot block and a small snowflake; NO mutex lock in the immutable group. Blue people and scope outlines, amber message envelope, green immutable data. No extra locks in the other groups either. Balanced large three-column composition."
+  },
+  {
+    "id": "04-01a-local",
+    "asset": "public/illustrations/04-01a-local.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "df7aa581e6758a171f338acf84e157aea4d1969e5f0da8d606864931e5fafcad",
+    "prompt": "Use case: infographic-diagram. Edit this supplied 1536 x 1024 diagram with ONE tiny but essential change: add ONE short vertical BLUE connecting line from the exact horizontal center of the bottom edge of the top card labeled “request_id = A” downward to the midpoint of the existing blue horizontal bracket that joins the TOP edges of the two blue Task A blocks. Currently the top card is floating with a visible white gap above that bracket; CONNECT this gap so the single card is visibly connected to BOTH Task A blocks. The new segment must meet the bracket cleanly as a T junction, with NO arrowhead. Do NOT move or redraw any card, text, line, colors, borders, margins, fills, the orange B connector, the A-B-A execution track or the time arrow. Preserve every other pixel/compositional relationship as closely as possible. No added labels or icons, no crossings, no other changes.",
+    "source": "/root/.codex/generated_images/01a06e73-5992-7c81-95c0-bf6984f3c171/exec-2f8a84d5-64bb-495a-8b82-094e852f9168.png"
+  },
+  {
+    "id": "04-01b-transfer",
+    "asset": "public/illustrations/04-01b-transfer.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "33916a68b6543b4e96f4333b34641f6414521fe99c5188a83cf5a0b24cff0cd2",
+    "prompt": "Use case: infographic-diagram. Edit the supplied diagram image, preserving its clean technical-conference diagram style, pure white background, dark navy outlines, clear blue #087fbd and warm orange #e67700 palette. Keep landscape 1536 x 1024. Large highly readable labels, generous margins, no title/footer/watermark, no new decorative elements. Preserve the specified technical relationships exactly. Remove the Python logo from the sender completely and remove the decorative cube from the recipient completely. Use simple clean large object rectangles at sender and recipient, with NO icons or decoration inside. Preserve these exact six labels: “发送方”, “对象元数据”, “pickle”, “带外缓冲”, “接收方”, “重建对象”. Put “发送方” as the clear label of the left object box; put “接收方” above the right object box and “重建对象” centered inside it. Preserve ONLY TWO left-to-right routes: upper blue route goes from sender through “对象元数据” then the “pickle” box and into the recipient; lower orange route goes from sender through one larger “带外缓冲” box directly into the SAME recipient, completely bypassing pickle. Both routes visibly reunite at the single recipient. Do not create separate recipients or a third route. Increase the overall subject height to fill about 80 to 85 percent of the canvas, with the upper blue route clearly in the upper half, lower orange route clearly in the lower half, and larger sender/recipient boxes spanning these two levels. Keep roughly 60 pixel outer margins. Use large labels and pale blue/orange fills, no strong gradients or drop shadows. Never show zero-copy slogans, ownership handoff, shared-memory locks, API snippets or dates.",
+    "source": "/root/.codex/generated_images/01a06e73-5992-7c81-95c0-bf6984f3c171/exec-0f1dd1e1-6f42-4f44-aa92-917b55b25218.png"
+  },
+  {
+    "id": "04-01c-immutable",
+    "asset": "public/illustrations/04-01c-immutable.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "951d8a832caf26d23e2719efa5f95863d584574515a67835172932723767b4d8",
+    "prompt": "Use case: infographic-diagram. Create one finished explanatory diagram for a Chinese technical conference slide. Raster image, landscape 1536 x 1024 (3:2), pure white background, crisp flat diagram style matching a Python talk. Dark navy #172033 outlines and text, clear blue #087fbd and warm orange #e67700 roles, restrained teal #16836b only for read-only/completed states. Large readable simplified Chinese and exact English identifiers. Main labels roughly 64–80 px at 1536 width, fewer than 9 short labels total. Generous spacing but the meaningful diagram should occupy about 85–90% of the canvas. Thin subtle pale fills; no gradients, shadows, 3D, mascot, title, subtitle, legend, PEP footer, watermark, tiny decoration or unexplained extra nodes. This image is the diagram only, not a whole slide. Keep all labels and paths inside the frame. \nA shallow immutability architecture diagram. Left: one green mapping frame labeled “frozendict”, with three small key ports and a clear annotation “键值关系固定”. Three fixed arrows point right to THREE separate value boxes OUTSIDE the green frame: “字符串”, “数字”, and orange “list”. String and number are blue or green; the list contains three plain square elements and one small orange edit mark affecting ONLY an element inside list. Under that orange box label “内容仍可变”. All three mapping arrows stay unchanged. Do not put the list inside a frozen outer envelope, do not show the mapping replacing a value, do not use an overall snowflake or padlock. No extra readers needed. Exactly six short labels.",
+    "source": "/root/.codex/generated_images/01a06e73-5992-7c81-95c0-bf6984f3c171/exec-5f1d30cb-4d3d-41bb-bf62-e93b81c16d5e.png"
+  },
+  {
+    "id": "04-02-race",
+    "asset": "public/illustrations/04-02-race.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "4a7f8bae03a14df3617f784e47e980b722730e27e1713c5401d78bc8beb8ae0f",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Keep the two routes converging into one cache slot. Upper start label 线程 A, lower start 线程 B. On each route, replace empty circle with a clear large node 缺失, then a colored block 计算. Both lead to the SAME right cache slot labeled cache, with a small red 覆盖 annotation. These six kinds of labels only, missing/computation labels repeat on the two tracks. Blue upper route and amber lower route, red only for overwrite. Align checking and computation into two clear columns. Do not depict corruption or crashing; the problem is both checked absent, both computed, last write overwrites."
+  },
+  {
+    "id": "04-03-protection",
+    "asset": "public/illustrations/04-03-protection.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "2c036e2381c2e729d452be767a9cfd74b9defa4dfc565e1a69657edce3df4f8c",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Redraw five large clear shields in a loose 3+2 arrangement inside a very pale blue runtime grouping border. Exact shield labels: 引用计数, 内存, GC, 容器, 执行与扩展. Each shield may have ONE simple tiny companion icon, but the labels dominate. Below and clearly OUTSIDE the runtime grouping, one amber lock labeled 应用同步. Six labels total. Delete the big open padlock and bundle of dotted rays. No arrows among the five mechanisms: they are concurrent categories, not a pipeline; runtime protection does not automatically solve application races."
+  },
+  {
+    "id": "04-04-refcounts",
+    "asset": "public/illustrations/04-04-refcounts.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "39ff6f31bd522bd3ea4fc5c6ae1399363da1367a7882b6ee4879fb5e7c764164",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Delete the central cube and obscure surrounding symbols. Recompose four equal groups in a spacious 2x2 grid; headings 偏置计数, 永生, 延迟, 分线程. In biased counting, a blue local counter and amber shared counter each on its own path, with one short label 本地 / 共享. Immortal: infinity symbol with a stationary counter, no outgoing recycling arrow. Deferred: a few stack sheets and a fine dotted line, NO pause button and no stopped-thread metaphor. Distributed: two separate small per-thread counters converge into 运行时汇总. Only these six kinds of text. No arrows between the four groups, no implication that all objects follow all mechanisms."
+  },
+  {
+    "id": "04-04a-biased-counting",
+    "asset": "public/illustrations/04-04a-biased-counting.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "91c91ae3e21c4c2a05995c4838ccb8675728398e6348311799a17d39ab869e27",
+    "prompt": "Make only one typography correction to this exact diagram. The small label 需要时 above the dotted convergence is too tiny for a conference slide. Enlarge 需要时 to approximately TWICE its current height, about the same letter height as 同一对象, using dark navy bold Chinese text. Keep it centered above the two dotted paths, with white space behind the label so no dotted line crosses the characters; slightly lower the convergence curve if necessary to avoid overlap. Preserve all other text, colors, shapes, positions, the ONE common object boundary labeled 同一对象, two SOLID top arrows, all lower DOTTED arrows, and the 1536x1024 dimensions. Do not change wording or add any other graphics.",
+    "source": "/root/.codex/generated_images/01a06e73-9844-79e3-a659-6de30dc93205/exec-79f26a72-4d30-41e2-9729-637c246e9d7d.png"
+  },
+  {
+    "id": "04-04b-deferred-counting",
+    "asset": "public/illustrations/04-04b-deferred-counting.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "a80b4f552da682a51c04171eaca9860fb25680fa9754ab49effee1b5dfc38123",
+    "prompt": "Edit this exact 1536x1024 diagram following a technical slide review. Preserve the pure white background, navy large Chinese labels, BLUE top route and ORANGE bottom route, two widely separated rows, and NO connection between rows. Make these targeted changes only. Top row: keep 延迟 and the stack card 栈上引用 with its right arrow; change the right destination label from GC 扫描 to the exact text GC 补看. REMOVE ALL THREE empty square boxes from inside that destination, leaving one simple large card containing ONLY GC 补看, vertically centered in the card. Bottom row: REMOVE each ambiguous horizontal minus-like stroke and replace it with the exact centered large navy label 计数 A in the upper small orange card and 计数 B in the lower small orange card. REMOVE the label 各自累计 completely. Draw two short clean orange branches, one from each counter card, joining into the single existing right-pointing arrow to 协调汇总, so both counts clearly contribute. Preserve the single large 协调汇总 card. The two lower counter cards must NOT connect to each other. No bar charts, scan grids, empty widgets, icons, extra nodes, extra captions, shadows or gradients. Every retained and changed label must be large, crisp and legible, exactly as written.",
+    "source": "/root/.codex/generated_images/01a06e73-9844-79e3-a659-6de30dc93205/exec-b7392c23-be09-4e65-854c-fa988ee22cd0.png"
+  },
+  {
+    "id": "04-05-memory-gc",
+    "asset": "public/illustrations/04-05-memory-gc.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "9caeea2cd4045578d39f46d681508e51d9c833cf1330151408cca71c8acf2ade",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Rebuild a clear pause window: two horizontal Python-thread execution tracks, active blocks on the left and right. A WIDE pale-amber vertical band in the middle labeled 暂停; inside the band the two running lines become thin dashed pauses with NO work blocks. Below them INSIDE the same band is a heap with only SIX cells labeled mimalloc 堆, read by a small magnifier labeled GC 扫描. Right side label 恢复. Common track label Python 线程. Optional small top label 一次暂停阶段. These six labels only. Remove the thirty tiny cells; pause must have visible duration. This is one GC pause phase, not all GC or finalizers. Relation among pause, stable heap scan, and resume must be direct."
+  },
+  {
+    "id": "04-05a-gc-heap",
+    "asset": "public/illustrations/04-05a-gc-heap.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "614e03177337e869b63ce9f56c5c8142e28e6a3436e195599e421aaaa988a998",
+    "prompt": "Edit this exact 1536x1024 reference diagram with a minimal correction. Add the same small orange square tracking mark already present on A and C to object B in BOTH views: one orange square inside the upper-left corner of the B rectangle in the left memory-page view, and one orange square inside the upper-left of the B circle in the right reference-graph view. Keep the marks inside the object shapes. After this edit A, B and C must ALL have matching orange tracking marks in BOTH views. Preserve absolutely everything else: white background, navy outlines, pale blue fills, two mimalloc page frames, A/B/C identities and positions, existing reference arrows A→B, A→C, B→C, the tp_traverse arrow, and every existing label and its spelling. Do not add or remove objects, references, page frames, labels, or other artwork. Do not move objects. Do not change the graph topology.",
+    "source": "/root/.codex/generated_images/01a06e73-9844-79e3-a659-6de30dc93205/exec-69298426-1472-4c0e-8cda-4a46446a3fe9.png"
+  },
+  {
+    "id": "04-05b-gc-cycle",
+    "asset": "public/illustrations/04-05b-gc-cycle.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "b5253163211b2a8968f9fa79649c7fb40d3da03b6b39eca2c35a254305d20701",
+    "prompt": "Edit the exact supplied GC diagram while preserving 1536x1024 landscape, pure white background, navy labels, blue execution tracks and two separate pale amber pause bands. Keep the chronological positions unchanged: pause① and 查不可达 first, exactly ONE 终结器 card in the WHITE region BETWEEN the two pause bands, pause② and 查复活 next, exactly ONE final action card in the WHITE region AFTER the second band. Keep TWO parallel blue execution tracks, dotted INSIDE each pause band and solid in WHITE regions. Make only two clarity changes: (1) Add one shared, large readable BLUE caption Python 执行线程 identifying both tracks, in the whitespace below the entire diagram. If needed shorten the lower ends of both pause bands equally to create a clean bottom caption area, without changing where either track crosses a band. (2) Replace the text 断开循环 in the final card with the exact conditional text 仍不可达才断环, laid out as two lines: 仍不可达 / 才断环. Use clear large characters, and keep the entire card outside the second pause band. Preserve the single 终结器 card and do NOT duplicate any action on separate tracks. No extra steps, branching arrows, unrequested labels, icons, dates or proportions. Do not add a third execution track. No gradients or shadows.",
+    "source": "/root/.codex/generated_images/01a06e73-9844-79e3-a659-6de30dc93205/exec-5c5c1858-8f6b-4610-ae41-0c1ac2462f74.png"
+  },
+  {
+    "id": "04-06-containers",
+    "asset": "public/illustrations/04-06-containers.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "82e486348b977b51bb64698dcc2fba248ea42a362cfaf431e6e7bb60cf929e93",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Keep only a large top node 乐观读取, a larger decision diamond 强引用 + 验证, an amber lock node 加锁重试, and a green 返回值 node. Successful branch labeled 成功 bypasses the lock and reaches return; unsuccessful branch labeled 失败 goes through lock retry, then returns. Exactly six labels. Blue/green fast path, amber normal fallback. Remove the empty start circle and meaningless document. No extra memory diagrams, unrelated annotations, or crashing/error imagery. Ensure arrow directions and branch convergence are unambiguous and labels cannot touch lines."
+  },
+  {
+    "id": "04-07-extensions",
+    "asset": "public/illustrations/04-07-extensions.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "a8c1d3ee4b3a9bad831d9c0fd1ee3e27a91b3a9c55d624906c343de719618611",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Rebuild a clear spacious 2x2 arrangement without connecting flow arrows. Four main labels: 线程本地字节码, 强引用, 扩展声明, cp314t. Bytecode group: two blue/amber thread lines EACH has its own three instruction slots. Strong-reference group: solid reference arrow to an amber object, with short exact API label PyList_GetItemRef. Declaration group: one simple module with exact label Py_mod_gil. Distribution group: one simple wheel/package shape bearing cp314t, with its t highlighted amber. Six label locations. No shield checkmarks implying automatic thread safety, no lock implying immutability, no abi3t. Remove plug/puzzle metaphors."
+  },
+  {
+    "id": "04-08-lock",
+    "asset": "public/illustrations/04-08-lock.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "4758c5ece767ba8dec1f03a0a5f6857224d6b09cf691befe390cfc08ecfb26f3",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Keep a single large critical-section boundary with a lock covering all three steps. Enlarge its three step circles and label them 检查, 计算, 写入. Above lock label 同一把锁. Only TWO input paths: blue 线程 A goes THROUGH the gate into the section; amber 线程 B 等待 stops visibly OUTSIDE at the gate. Remove the third gray input. Six labels total. Do not draw both input arrows passing the gate simultaneously. Whole check-compute-write sequence is contained in one continuous boundary. Large simple layout, no tiny text."
+  },
+  {
+    "id": "04-09-state",
+    "asset": "public/illustrations/04-09-state.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "c56431f64f396d4253b48506012db64533c811ab4a67b534b0569307c93443f0",
+    "prompt": "Edit this reference into a clear, minimal explanatory diagram for a Python conference slide. Pure white background, crisp dark navy outlines. Preserve meaningful blue for work/state, amber for waiting or handoff, red for failure, green for completed cleanup. Main diagram fills about 80% of the canvas, leave only 6% outer margins. Landscape 1536x1024, legible in a 900x780 on-screen frame. Chinese labels must be exact, bold clean sans-serif, around 54px at 1536px width. Keep text close to its visual referent. No title, footer, prose, tiny labels, decorative symbols, gradients or texture. Replace the unlabeled binary tree with a central 状态 node connected by NON-DIRECTIONAL thin lines to four equally sized access-pattern groups in a 2x2 arrangement. Exact group labels: 一方：本地, 换手：传递, 只读：不变, 共写：同步. In groups reuse simple recognizable owner-with-data, envelope handoff, two readers of a green snapshot, and two writers approaching one amber data object through the SAME lock. Five labels total. No decision diamonds, no temporal sequencing arrows, no implication these strategies are strictly mutually exclusive. Delete abstract crystals, railway tracks and empty circles."
+  },
+  {
+    "id": "04-timeline",
+    "asset": "public/illustrations/04-timeline.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1920,
+      819
+    ],
+    "sha256": "678da54691f2726532744407753b512f03c20fa7af25f9541de579283d1b373a",
+    "prompt": "Use case: infographic-diagram.\nAsset type: a finished technical conference timeline illustration, extra-wide landscape 2.35:1, preferably 2400 x 1024.\nCreate the actual labeled timeline, not a mockup. Pure white background. Crisp flat editorial infographic, dark navy #172033 text, blue #087fbd, warm orange #d97706 and teal #16836b accents. Large clean sans-serif typography, accurate simplified Chinese and exact English API names. Professional generous spacing, restrained pale panels, very small purposeful icons. Optimize for projection and reading from the back of a room. Fill the canvas with the diagram; outer margin only 3%. No large title, subtitle, legend or footer, as the surrounding slide provides those. Every date, Python version, PEP number and feature specified below must be visible and paired correctly. Do not invent any labels or milestones. Dates are ordered milestones, not a proportional timescale. No gradients, 3D, shadows, mascots, watermark, or tiny decorative text.\n\nComposition: one horizontal timeline with FIVE ordered milestone dots and alternating panels above/below the line. Use blue for boundaries, orange for runtime protection, teal for immutable mapping. Very small explanatory icons: separate boxes, shared byte buffer, infinity with reference counter (not a frozen object), two small separate counters beside a local object lock (NO infinity symbol in the PEP 703 panel), read-only key/value map. Final milestone must have a clearly dashed panel border and conspicuous 'RC' badge to distinguish a prerelease version. Exact text per milestone:\n1: '2008', 'Python 2.6 / 3.0', 'PEP 371', 'multiprocessing', '进程边界'\n2: '2019', 'Python 3.8', '标准库 · 无专属 PEP', 'shared_memory', '显式共享字节'\n3: '2023', 'Python 3.12', 'PEP 683', 'Immortal objects', '减少计数写入'\n4: '2024', 'Python 3.13', 'PEP 703', '偏置引用计数 · 对象锁', '自由线程内部保护'\n5: '2026', 'Python 3.15 RC', 'PEP 814 · Final', 'frozendict', '浅层不可变'\nKeep all five milestone texts unchanged. Only PEP 683 may use an infinity symbol; PEP 703 MUST use two separate local/shared counters plus an object lock, never infinity. The 2026 milestone is not yet a final Python release.\n",
+    "source": "/root/.codex/generated_images/01a06de1-6d3b-7d23-8644-2fbecdb21724/exec-59a19cd0-1f2f-4e0e-9a2f-ed767cb30ac9.png"
+  },
+  {
+    "id": "05-01-manual-state",
+    "asset": "public/illustrations/05-01-manual-state.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-05",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "1f2bbac5c51596066d618c51e9852a8259841e1cc3da9915ef0c555fc9285805",
+    "prompt": "Use case: scientific-educational. Edit the provided manual-coordination teaching diagram with two small, exact changes. Preserve all task positions, diagram geometry, white background, navy line weight, blue x and orange y identity colors, A/B parallel brace, two A→C and B→C arrows, all four locks named Lx/Ly and all existing action labels. In C's card, preserve the exact sentence “按约定顺序加锁” and add a second centered line immediately beneath it reading exactly “用后释放锁”. Both lines must be large and equally legible, around 44 pixels or greater on this 1536x1024 canvas. Extend only the C card's lower edge a little if required for generous padding. Do not squeeze the lettering. This is cleanup of the same locks after use, not destruction of state or rollback. Also change the isolated white X-looking letters in BOTH blue state tokens to unambiguously lowercase “x”, using a clear slightly italic lowercase form at normal x-height comparable to lowercase y. Do not change Lx or Ly, the state colors, or any other text. No extra arrows, new nodes, icon legend, footer, page title, code lines or decorations. Preserve professional, simple, clear conference-slide style and full clean canvas margins.",
+    "source": "/root/.codex/generated_images/01a06de1-6d3b-7d23-8644-2fbecdb21724/exec-16a7ef57-fb48-43b4-be2d-09dc02accb8d.png"
+  },
+  {
+    "id": "05-02-bocpy",
+    "asset": "public/illustrations/05-02-bocpy.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-05",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "d936926550b2b3bf124427e0c8f3af5d4b577c02f6feb87f0ed0be9bb6aa90d4",
+    "prompt": "Use case: scientific-educational. Edit the provided Behavior-Oriented Concurrency diagram for slightly clearer projection at 1280x720. Preserve the same three A/B/C task cards, A and B positions, same x-blue and y-orange Cown pills, two arrows A→C and B→C, left “可并行” brace, “都完成后” between the arrows, and bottom “结束后释放访问权” with its single downward arrow. Keep a pure white background, navy lines and lettering, clean margins, small declaration glyphs and the 1536x1024 canvas. Make only one substantive refinement: enlarge the two important sentences inside C, “全部可用再执行” and “执行期间排他访问”, by about 18–22 percent to approximately 54 px, with generous spacing. Widen C modestly, keeping its right edge comfortably inside the canvas, to give these phrases enough width; preserve its visual center and reroute the two incoming arrow tips to meet its border cleanly. Slightly increase C height only if needed, leaving the release arrow and its caption fully visible and clearly separated. All lettering must remain dark, sharp and strong. Keep exactly the existing words and semantic relationships; C still declares BOTH Cown x and Cown y, starts when all requested resources are available, accesses them exclusively, then releases access. No lock symbols, performance claims, new tasks, new dependency arrows, title, footer, extra code or decoration. A/B must remain parallel-capable and independent of each other. Preserve all other content.",
+    "source": "/root/.codex/generated_images/01a06de1-6d3b-7d23-8644-2fbecdb21724/exec-774b70ad-770a-42ca-a650-f2fe4575e760.png"
+  },
+  {
+    "id": "05-outlook",
+    "asset": "public/illustrations/05-outlook.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-05",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "725b4436af845321a2a51d9fa7c03aa4bad0460b5f372a350a4ec17bfaf23696",
+    "prompt": "Use case: scientific-educational. Refine the referenced open-runtime diagram with only the following targeted clarity changes. Preserve white background, layout, three left relation cards and their headings, central dashed room labelled “运行时？”, and right-side arrangement of three related blue task tiles above two independent orange task tiles. First, add a LARGE dark navy code-work symbol “>_” inside EACH of the five right-hand tiles, so they unmistakably represent executable tasks instead of empty placeholders. Second, inside the little object rectangle in the left “资源需求” card, add the short large label “对象”, distinguishing resource state from tasks. Third, change the lower-right heading “无关任务” to EXACTLY “无关可并行”, keeping it orange, large and readable. Fourth, add ONE restrained gray dashed rightward directional arrow from the central runtime frame toward the whitespace between the two task groups; it represents a possible scheduling arrangement, not a dependency edge between the tasks. It must not touch any task tile and should be visually lighter than the two solid dependency arrows within the top blue chain. Keep top heading “必要顺序”. No arrows connect the bottom orange tasks to each other or to the blue group; no shared final result. Do NOT reintroduce maps, databases, files, gears, checkmarks, extra task labels, clocks or extra captions. Keep the central question mark and ample spacing, all text inside the canvas.",
+    "source": "/root/.codex/generated_images/01a06de1-6d3b-7d23-8644-2fbecdb21724/exec-2bbdab8d-a6a9-4925-9d6e-e3dfe8646071.png"
+  },
+  {
+    "id": "05-summary",
+    "asset": "public/illustrations/05-summary.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-05",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "f37463a67ff2cc09430df97384ceac3c0aaaab5b15ab05b52a708de1df8b4490",
+    "prompt": "Use case: text-localization. Edit the referenced three-column summary illustration with a single wording correction: in the BOTTOM orange execution tray, replace the label “线程” with exactly “自由线程”. Keep that four-character label on ONE line and at the SAME readable font size as the other execution labels; widen its small inner rounded tile as needed within the orange tray, leaving generous side margins. It is acceptable to widen all three inner execution label tiles equally if that makes their alignment cleaner, but do not move or resize the outer trays or any other diagram. Preserve every other text and object exactly: blue task tree with neutral final circle, labels “任务结构”, “谁来收尾”, “执行模型”, “在哪里执行”, “进程”, “解释器”, “状态模型”, “谁能修改”, “共享对象”, and the two tasks sharing one lock and one object. Preserve pure white background, navy contours, blue/orange/gold palette, three-column spacing, original image size and complete margins. No new annotation, no changed arrows, no extra object, no shadow or decorative additions.",
+    "source": "/root/.codex/generated_images/01a06de1-6d3b-7d23-8644-2fbecdb21724/exec-c882f1c8-1213-4771-888f-f0607e8801c2.png"
+  },
+  {
+    "id": "05-timeline-outlook",
+    "asset": "public/illustrations/05-timeline-outlook.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1920,
+      819
+    ],
+    "sha256": "4a18b35abf58465f03ec505dc942de8d4ae3b53ae4a12e4a8f5468a138171e44",
+    "prompt": "Use case: text-localization. Asset type: technical conference timeline illustration. Image 1 is the edit target. Make a minimal exact wording correction and rebalance the two tiers. In the bottom-left PEP 789 panel, change ONLY the phrase '取消作用域内限制 yield' to the exact phrase '在取消作用域内限制 yield'. This means restricting yield inside cancellation scopes; do not omit the initial 在. All other years, Python versions, PEP identifiers, API spellings, Chinese feature text, chronological context, independent research panel arrangement, palette and border status meanings must remain correct and unchanged. Keep only the top horizontal arrow; never connect the two tiers or any research panels. Give the three bottom research panels more visual prominence by reducing top tier height and shrinking the repeated icons, as specified below. Use large readable lettering in the research panels and keep text inside borders. Use case: infographic-diagram.\nAsset type: a finished technical conference timeline illustration, extra-wide landscape 2.35:1, preferably 2400 x 1024.\nCreate the actual labeled timeline, not a mockup. Pure white background. Crisp flat editorial infographic, dark navy #172033 text, blue #087fbd, warm orange #d97706 and teal #16836b accents. Large clean sans-serif typography, accurate simplified Chinese and exact English API names. Professional generous spacing, restrained pale panels, very small purposeful icons. Optimize for projection and reading from the back of a room. Fill the canvas with the diagram; outer margin only 3%. No large title, subtitle, legend or footer, as the surrounding slide provides those. Every date, Python version, PEP number and feature specified below must be visible and paired correctly. Do not invent any labels or milestones. Dates are ordered milestones, not a proportional timescale. No gradients, 3D, shadows, mascots, watermark, or tiny decorative text.\n\nComposition: two horizontal tiers in a wide 2.35:1 canvas. The top release-context tier uses only 32% of canvas height; the bottom research tier uses 52%, with a compact 8% group label between. Give PEP789, PEP805 and BOC larger type than the background details, and minimize repetitive calendar/document icons. TOP TIER is the chronological release context: TWO equal panels, 2025 pointing right to 2026 RC. BOTTOM TIER is THREE independent exploration panels placed side by side under the centered clear label '当前探索 · 非发布承诺'. Do NOT connect the top tier to the bottom tier: they are release background versus independent current research, not technical dependencies or promised successors. Use most space for text, very small icons only. Equal prominence for the PEP805 and BOC panels.\nTop left panel: '2025 · Python 3.14', 'PEP 779 · 自由线程正式可选', '高层并发原语开始讨论'.\nTop right panel: '2026 · Python 3.15 RC', 'PEP 803 · abi3t', 'PEP 814 · frozendict'. Dashed amber border with clear RC.\nBottom left panel: 'Draft · 版本未定', 'PEP 789', '在取消作用域内限制 yield'.\nBottom middle panel: 'Draft · 目标 Python 3.16', 'PEP 805', '对象访问状态与所有权转移'.\nBottom right panel: '第三方实验 · 无标准库版本', 'BOC / bocpy', 'Behavior 声明 Cown 资源'.\nBlue solid for released 2025, amber dashed for RC and Draft, teal dashed for BOC. PEP779 MUST explicitly say 自由线程. Do not invent years or Python versions for PEP789 or bocpy. Keep the lower research panels unconnected, no branching release-roadmap arrows.\n",
+    "source": "/root/.codex/generated_images/01a06ddf-161f-7502-99cd-bb4fcbe1cbbe/exec-15b91003-6799-43d2-b344-f7cd82f06be2.png"
+  },
+  {
+    "id": "05-timeline-summary",
+    "asset": "public/illustrations/05-timeline-summary.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-04",
+    "dimensions": [
+      1920,
+      819
+    ],
+    "sha256": "bd4e3fa7914677bbfc38de5a98c6001f78ace5e5c940c89440a25e282c18b7f6",
+    "prompt": "Use case: infographic-diagram.\nAsset type: a finished technical conference timeline illustration, extra-wide landscape 2.35:1, preferably 2400 x 1024.\nCreate the actual labeled timeline, not a mockup. Pure white background. Crisp flat editorial infographic, dark navy #172033 text, blue #087fbd, warm orange #d97706 and teal #16836b accents. Large clean sans-serif typography, accurate simplified Chinese and exact English API names. Professional generous spacing, restrained pale panels, very small purposeful icons. Optimize for projection and reading from the back of a room. Fill the canvas with the diagram; outer margin only 3%. No large title, subtitle, legend or footer, as the surrounding slide provides those. Every date, Python version, PEP number and feature specified below must be visible and paired correctly. Do not invent any labels or milestones. Dates are ordered milestones, not a proportional timescale. No gradients, 3D, shadows, mascots, watermark, or tiny decorative text.\n\nComposition: THREE parallel horizontal historical lanes, equal height. Each lane has a short responsibility label at far left, then TWO large milestone panels linked left-to-right. Blue task lane, orange execution lane, teal state lane. Small purposeful icons, text occupies most of each panel. Keep timeline arrows within their own lane. The last state panel is dashed and marked RC. Exact text:\nLane 1 '任务归属'. Left: '2001 · Python 2.2', 'PEP 255', 'yield · 保存现场'. Right: '2022 · Python 3.11', 'TaskGroup · 作用域收尾', 'PEP 654 · ExceptionGroup'.\nLane 2 '执行位置'. Left: '2008 · Python 2.6 / 3.0', 'PEP 371', 'multiprocessing'. Right: '2025 · Python 3.14', 'PEP 734 · 多解释器 API', 'PEP 779 · 自由线程正式可选'.\nLane 3 '状态边界'. Left: '2024 · Python 3.13', 'PEP 703', '对象锁 · 局部同步'. Right: '2026 · Python 3.15 RC', 'PEP 814 · Final', 'frozendict · 浅层不可变'.\nDo not merge TaskGroup with PEP 654 attribution. State lane MUST start with 2024 / Python 3.13 / PEP 703, not the old immortal objects milestone. Use a small lock icon there. Versions advance independently in each lane, so no shared x-axis. These are coexisting strategies, not replacements.\n",
+    "source": "/root/.codex/generated_images/01a06de1-6d3b-7d23-8644-2fbecdb21724/exec-f834555e-4c29-493e-8b62-1e6bf715836d.png"
+  },
+  {
+    "id": "index-organization",
+    "asset": "public/illustrations/index-organization.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-05",
+    "dimensions": [
+      1774,
+      887
+    ],
+    "sha256": "7b8278af8cb85bd32e925f7b472be18839cfde61d6d404e8b78f77be48e7472f",
+    "prompt": "Use case: scientific-educational. Recompose the referenced blue call/return illustration into a wide 2:1 landscape canvas, matching a companion GIL gate image. Preserve the exact meaning and the FIVE labels “同步调用栈”, “调用者”, “普通函数”, “调用”, “返回”. Exactly two object cards inside one enclosing rounded boundary. Upper arrow goes from caller on the LEFT to function on the RIGHT, lower arrow goes from function on the RIGHT back to caller on the LEFT. Labels and arrows stay clearly separate. Make the two object cards shorter and broader; use pale blue fills, dark navy text and crisp blue outlines, with subtle shallow thickness like an elegant architectural tray. Remove the old deep solid blue glossy fill. The meaningful content should fill about 92% of the wide canvas with only small white margins; reduce unused vertical space rather than merely putting white stripes beside the old drawing. Keep all labels large and horizontally legible, around 80–100 px, no new text or icons. Pure white background, no texture, no shadows outside objects, no arrows leaving the enclosure. Do not draw a third return object, asynchronous branches, clocks or task groups.",
+    "source": "/root/.codex/generated_images/01a06de1-6d3b-7d23-8644-2fbecdb21724/exec-bc3d2c11-a0cc-4bc9-8ac4-1f9b0153a0be.png"
+  },
+  {
+    "id": "index-parallel",
+    "asset": "public/illustrations/index-parallel.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-05",
+    "dimensions": [
+      1774,
+      887
+    ],
+    "sha256": "7375e3af8622b8affb22841592f6c1ed1f1ee045150b228cc763a5ed60270bab",
+    "prompt": "Use case: scientific-educational. Perform a PRECISE SMALL GEOMETRY EDIT on the referenced 1774 x 887 illustration. It currently has a real error: the orange input from thread A is at y=350, while the orange line inside the arch and output arrow are at y=470. Correct this mismatch. Move ONLY the entire “线程 A” capsule DOWN so its vertical CENTER is exactly y=470. Keep its horizontal position x=85..440. Make this capsule slightly shorter, about 150 pixels tall (top395, bottom545), so it remains separated from the unchanged thread B capsule below. Its “线程 A” lettering must remain large and crisp. DELETE the old orange input line at y=350 completely. REDRAW that input line as one straight horizontal orange segment at y=470, from the right edge of the moved A capsule to the left edge of the gate. Now the A input segment, the visible segment INSIDE the white opening, and the exit arrow must ALL be exactly collinear at y=470 — a ruler laid across all three segments would line up perfectly. The architectural gate posts may naturally occlude short pieces of this same straight route, but there must be absolutely NO vertical displacement between the three visible orange segments. Preserve the gate, its opening, internal orange line and exit arrow at their CURRENT positions. Preserve “线程 B”, its gray dashed waiting path and “等待” label at their CURRENT positions. Preserve “同一解释器”, “GIL”, “Python 执行”, interpreter frame, orange/navy/gray colors, white background and original 2:1 canvas. Do not redraw the whole scene, change the perspective, invent another exit, add symbols, alter any other text or move the Python tile. The only intended changes are lowering and slightly shortening the A capsule and lowering its input line to match the existing output.",
+    "source": "/root/.codex/generated_images/01a06de1-6d3b-7d23-8644-2fbecdb21724/exec-c740a128-224d-471c-9a47-3f94947be02e.png"
+  },
+  {
+    "id": "index-state",
+    "asset": "public/illustrations/index-state.png",
+    "tool": "built-in image_gen.imagegen",
+    "generated_on": "2026-09-05",
+    "dimensions": [
+      1774,
+      887
+    ],
+    "sha256": "224972a70375a900a03b167c7313d41dbbdb7a7d67844e00f123a30d915aa31b",
+    "prompt": "Use case: scientific-educational. Recompose the referenced gold state-handoff illustration into a broad 2:1 landscape canvas for a chapter-overview row. Retain its exact semantics: two separate execution-domain trays, left containing the original object and right containing its distinct copy, one rightward transfer arrow and one envelope in the white gap. Preserve exactly the five large labels “执行域 A”, “执行域 B”, “对象”, “副本”, “传值”. Make the two outer trays shorter and broader while retaining clearly separate boundaries and visibly distinct objects. Increase the visual size of cubes, labels and arrow relative to the canvas, use only 4–5% outer margins and very little extra top/bottom white space. Retain restrained shallow architectural depth, pale gold fill, gold outline and dark navy text, with a PURE white clean background, consistent with a companion blue call/return tray diagram and an orange GIL gate. No extra objects, shared base or shared memory pipe, no second arrow, no lock, no metadata or title outside the illustration. The two cube objects must remain on their own sides; the envelope is data in transfer, not either cube disappearing.",
+    "source": "/root/.codex/generated_images/01a06de1-6d3b-7d23-8644-2fbecdb21724/exec-c012fbd7-15b7-438c-91ce-b855b4b5735c.png"
+  }
+]

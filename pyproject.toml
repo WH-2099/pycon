@@ -1,0 +1,59 @@
+[project]
+name = "pycon-china-2026-shanghai"
+version = "0.1.0"
+description = "PyCon China 2026 Shanghai talk materials"
+requires-python = ">=3.14"
+dependencies = ["marimo>=0.24.0"]
+
+[tool.ruff]
+extend-exclude = ["ref"]
+preview = true
+
+[dependency-groups]
+dev = [
+    "ruff>=0.16.6",
+    "rumdl>=0.2.64",
+    "ty>=0.0.78",
+]
+
+[tool.ruff.lint]
+select = ['ALL']
+ignore = [
+    'missing-trailing-comma',  # Conflicts with `ruff format`.
+    'commented-out-code',  # False positives are common.
+    'TC',      # Runtime use of typing constructs is common now.
+    'CPY',     # Covered by the standalone LICENSE file.
+    'too-many-arguments', # Explicit is better than implicit.
+    'too-many-positional-arguments', # Complex is better than complicated.
+    'no-self-use', # Violates the usual practice.
+    'D',       # Too verbose.
+    'FBT',     # Too strict.
+    'relative-imports',  # Too absolute.
+    'any-type',  # We hope to enforce this, but typing is still evolving.
+]
+
+[tool.ruff.lint.pydoclint]
+ignore-one-line-docstrings = true
+
+[tool.ruff.lint.per-file-ignores]
+'slide_variants.py' = ['ambiguous-unicode-character-string'] # Intentional Chinese punctuation.
+'check_slide_variants.py' = [
+    'assert', # This is an executable stdlib self-check.
+    'pytest-composite-assertion', # No pytest dependency or test suite.
+    'private-member-access', # sys._is_gil_enabled() is the documented runtime probe.
+    'suspicious-subprocess-import', # Runs project-owned examples without a shell.
+    'subprocess-without-shell-equals-true',
+]
+'slides.py' = [
+    'missing-return-type-private-function',
+    'missing-return-type-undocumented-public-function',
+    'missing-type-function-argument', # marimo generates dependency parameters without annotations.
+    'import-outside-top-level', # Imports inside cells participate in marimo's dependency graph.
+    'useless-return', # marimo persists explicit empty cell returns.
+    'ambiguous-unicode-character-string', # Slide copy intentionally contains Chinese punctuation.
+]
+
+[tool.rumdl]
+enable = ['ALL']
+line-length = 120
+exclude = ['.git', '.github', 'LICENSE', '2025.md', 'pep703-key.md']

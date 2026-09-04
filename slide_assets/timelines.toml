@@ -1,0 +1,61 @@
+# Six overviews; each is inserted as one fixed illustration slide.
+# Final image records are in prompts.json.
+[slides."01-timeline"]
+section = "第一章 · 历史总览"
+title = "从能够并发，到怎样并发得好"
+takeaway = "能力逐步释放，任务归属与状态保护也逐步明确。"
+status = "发布年份 · 节点间距不代表时长 · 3.14 自由线程仍为可选构建"
+diagram_reason = "按首次发布年份建立全场历史坐标；蓝色任务结构与橙色执行能力交织，后续章节分别展开。"
+alt = "从 2001 年 Python 2.2 的 PEP 255 生成器，经 2008 多进程、2015 原生协程、2022 TaskGroup 与异常组、2024 实验自由线程，到 2025 Python 3.14 的多解释器和正式但可选的自由线程。"
+notes = "年份指特性首次随所列 Python 版本发布，不是 PEP 创建或接受时间。PEP 654 定义 ExceptionGroup 与 except*，TaskGroup 是同版标准库特性，不能说由 PEP 654 定义。3.14 的多解释器入口具体为 concurrent.interpreters，另有 InterpreterPoolExecutor。生成器/协程不等于 CPU 并行，三个执行模型长期共存。"
+sources = ["https://peps.python.org/pep-0255/", "https://peps.python.org/pep-0371/", "https://peps.python.org/pep-0492/", "https://peps.python.org/pep-0654/", "https://docs.python.org/3.11/whatsnew/3.11.html", "https://peps.python.org/pep-0703/", "https://peps.python.org/pep-0734/", "https://peps.python.org/pep-0779/"]
+
+[slides."02-timeline"]
+section = "第二章 · 任务结构时间线"
+title = "从函数暂停，到任务有归属"
+takeaway = "暂停 → 委托 → 调度 → 用作用域负责收尾。"
+status = "发布年份 · PEP 654 定义 ExceptionGroup / except*；TaskGroup 是同版标准库特性"
+diagram_reason = "单条时间线连接生成器通信、委托、事件循环、原生协程与结构化任务生命周期。"
+alt = "2001 Python 2.2 PEP 255 yield；2006 Python 2.5 PEP 342 send、throw、close；2012 Python 3.3 PEP 380 yield from；2014 Python 3.4 PEP 3156 asyncio；2015 Python 3.5 PEP 492 async/await；2022 Python 3.11 TaskGroup 与 PEP 654 ExceptionGroup。"
+notes = "PEP 3156 头部的 Python-Version 是早期目标 3.3；asyncio 实际在 Python 3.4 进入标准库，故此处采用 2014 / 3.4。TaskGroup 管理生命周期，PEP 654 提供 ExceptionGroup 与 except*，两者不能合并成一个 PEP 特性。PEP 789 仍为 Draft，在第五章展望单独出现，不接在已发布主轴上。"
+sources = ["https://peps.python.org/pep-0255/", "https://peps.python.org/pep-0342/", "https://peps.python.org/pep-0380/", "https://peps.python.org/pep-3156/", "https://docs.python.org/3.4/whatsnew/3.4.html", "https://peps.python.org/pep-0492/", "https://peps.python.org/pep-0654/", "https://docs.python.org/3.11/library/asyncio-task.html#task-groups"]
+
+[slides."03-timeline"]
+section = "第三章 · 执行模型时间线"
+title = "三条并行路线，一直并存"
+takeaway = "进程、解释器、自由线程，打开的是不同位置的并行。"
+status = "各轨从左向右读 · 节点间距不代表时长 · 自由线程需要可选构建且 GIL 关闭"
+diagram_reason = "三条互不汇合的历史轨道展示执行模型共存；每条分别标明起点和目前的接口或支持阶段。"
+alt = "三条并行时间线：多进程从 2008 Python 2.6/3.0 PEP 371 延续至今；多解释器从 2023 Python 3.12 PEP 684 每解释器 GIL 到 2025 Python 3.14 PEP 734 标准库入口与解释器池；自由线程从 2024 Python 3.13 PEP 703 实验到 2025 Python 3.14 PEP 779 正式可选。"
+notes = "子解释器早已存在；2023 是 per-interpreter GIL 的落地，不是子解释器诞生时间。InterpreterPoolExecutor 与 concurrent.interpreters 都是 Python 3.14 新增，PEP 734 正文主提案是后者，前者属于同版配套接口。三轨横向位置不统一对齐年份。多解释器共享进程级资源，并非安全沙箱。"
+sources = ["https://peps.python.org/pep-0371/", "https://peps.python.org/pep-0684/", "https://peps.python.org/pep-0734/", "https://docs.python.org/3.14/library/concurrent.futures.html#interpreterpoolexecutor", "https://peps.python.org/pep-0703/", "https://peps.python.org/pep-0779/"]
+
+[slides."04-timeline"]
+section = "第四章 · 状态模型时间线"
+title = "共享越自由，保护越具体"
+takeaway = "从隔离、显式交接，到局部同步与减少共同写入。"
+status = "发布年份；3.15 为候选版 · 共享内存仍需同步 · 对象永生不等于对象不可变"
+diagram_reason = "挑出状态边界、显式共享、运行时保护与浅层不可变五个历史坐标，辅助本地/传递/不变/同步的讲述。"
+alt = "2008 PEP 371 多进程边界；2019 Python 3.8 shared_memory 显式共享字节；2023 Python 3.12 PEP 683 永生对象减少引用计数写入；2024 Python 3.13 PEP 703 偏置引用计数与对象锁；2026 Python 3.15 候选版 PEP 814 frozendict 浅层不可变。"
+notes = "shared_memory 无专属 PEP；不能归给 PEP 3118。它只是显式共享底层字节的历史例子，不等于跨进程直接共享任意 Python 对象，也不自动同步。对象永生处理生命周期/引用计数，并不冻结对象内容。PEP 703 是内部保护设计，应用复合操作仍需同步。PEP 814 已 Final，但 3.15 截至核验日为 RC2，计划 2026-10-01 正式发布；frozendict 仅浅层不可变。不可变映射前史：PEP 416 Rejected，PEP 603 Draft。"
+sources = ["https://peps.python.org/pep-0371/", "https://docs.python.org/3.8/library/multiprocessing.shared_memory.html", "https://peps.python.org/pep-0683/", "https://peps.python.org/pep-0703/", "https://peps.python.org/pep-0814/", "https://peps.python.org/pep-0416/", "https://peps.python.org/pep-0603/", "https://peps.python.org/pep-0790/"]
+
+[slides."05-timeline-summary"]
+section = "第五章 · 总结时间线"
+title = "三条演进线，汇成三个责任"
+takeaway = "任务有归属，执行有位置，状态有边界。"
+status = "各轨从左向右读 · 局部同步与浅层不可变可组合使用 · 3.14 自由线程可选，3.15 为候选版"
+diagram_reason = "每条演进线保留两个关键历史坐标，右端以具体能力收住，连接三章共同的责任主题。"
+alt = "三条总结时间线：任务从 2001 PEP 255 yield 到 2022 TaskGroup 和 PEP 654 异常组；执行从 2008 PEP 371 多进程到 2025 PEP 734 多解释器与 PEP 779 正式可选自由线程；状态从 2024 Python 3.13 PEP 703 对象锁与局部同步到 2026 Python 3.15 候选版 PEP 814 浅层 frozendict，两种保护方式仍可组合使用。"
+notes = "每条只选两个锚点，不是完整特性列表，也不是每项机制互相替代。图外的共同责任总结是讲者的教学归纳。状态线保留第四章主体 PEP 703 局部同步，连接 PEP 814 减少共同写入；它们是可组合的不同策略，不是替代或直接技术依赖。应用自己的复合状态变化仍需应用同步。3.15 的计划发布状态与已经发布的 3.14 分开。"
+sources = ["https://peps.python.org/pep-0255/", "https://docs.python.org/3.11/library/asyncio-task.html#task-groups", "https://peps.python.org/pep-0654/", "https://peps.python.org/pep-0371/", "https://peps.python.org/pep-0734/", "https://peps.python.org/pep-0779/", "https://peps.python.org/pep-0703/", "https://peps.python.org/pep-0814/", "https://peps.python.org/pep-0790/"]
+
+[slides."05-timeline-outlook"]
+section = "第五章 · 展望时间线"
+title = "下一步：让关系进入运行时？"
+takeaway = "底层能力继续完善，统一的高层模型仍在探索。"
+status = "核验 2026-09-04 · RC ≠ 正式发布 · Draft / 实验 ≠ 既定路线 · 虚框标识 RC、Draft 或实验"
+diagram_reason = "上方交代 3.14 到 3.15 的发布背景，下方独立列出当前草案与第三方实验；两组没有依赖连线。"
+alt = "已发布背景是 2025 Python 3.14 PEP 779 正式可选自由线程；2026 Python 3.15 候选版加入 PEP 803 abi3t 与 PEP 814 frozendict。下方独立列出当前开放探索：PEP 789 Draft 版本未定、PEP 805 Draft 目标 3.16，以及无标准库发布版本的第三方 BOC/bocpy 实验。"
+notes = "这是一张发布背景加探索地平线，不是 CPython 路线承诺或草案创建时间表。PEP 779 的接受说明要求开始讨论高层并发原语，不定义一个现成 API。3.15 RC2 已有 PEP 803 abi3t 与 PEP 814 frozendict，最终版本计划 2026-10-01。PEP 789 头部 3.14 是早期目标，Draft 尚未进入该版，故明确标版本未定。PEP 805 目标 3.16，仍 Draft，提出 Immutable/Local/Protected/Synchronized 四种状态与转移，不是已落地特性。BOC/bocpy 是第三方探索，基于显式 Cown 请求安排顺序，不会理解任意全局或外部状态，也没有事务回滚。上下分组不表示依赖 PEP 803/814，也不表示草案在 2026 年以后才出现。"
+sources = ["https://peps.python.org/pep-0779/", "https://github.com/python/steering-council/blob/main/updates/2025-06.md", "https://peps.python.org/pep-0803/", "https://peps.python.org/pep-0814/", "https://peps.python.org/pep-0790/", "https://peps.python.org/pep-0789/", "https://peps.python.org/pep-0805/", "https://microsoft.github.io/bocpy/"]
